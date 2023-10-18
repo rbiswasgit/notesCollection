@@ -1,0 +1,77 @@
+LDAP (Light Weight Directory Access Protocol)
+**********************************************
+
+=> LDAP is the Light Weight Directory Access Protocol
+=> by defination, LDAP is the standard protocol that works over IP network for accessing and maintaining directory data.
+
+Example-
+Company store their employees or resources details/information as a directory format on LDAP server.
+With the help of LDAP protocol , any employee within the organization can see the other employee related information through LDAP protocol over Intranet if permitted.
+
+=> Benefit, LDAP server directory data can be store and retrive in simple manner.
+=> LDAP server can be accessed through PORT 389 , TCP/UDP
+
+=> LDAP over SSL (LDAPS) server can be accessed through the PORT 636
+
+***
+
+=>> LDAP (Light Weight Directory Access Protocol)
+=>> LDAP is the application protocol for quering and modifying items in directory services. 
+
+=>> Access directory is the Database where all the data/information/resources related to any entity like organization/Library etc is stored. And with the help of the LDAP protocol we can access the record from the AD Server/LDAP server over the internet.
+
+=>> LDAP is the simplification of the x.500 directory access protocol
+=>> LDAP is the protocol of accesing data from the Access-Directory Database.
+=>> LDAP follows hirarchey architecture.
+
+organization(O) (Root)    - Ex ABC
+|
+Organization Unit(OU)  - Developer , Business , Finance
+|
+Organization Unit(OU) (Sub-Unit of Organization Unit)  -  Backenend,FullStack,Devops,DBTeam (comes under OU- Developer), simillarly Business and Finance OU also has there differentSub-Units
+|
+Attributes - Names (Emplyee name , resource name etc)
+
+
+****
+
+AD (Active Directory) -(Active Directory Database)
+--------------------------------------------------------------
+=>> Active Directory , it is used to provide authentication, group and user management, and also it is used to provide security policies
+=>> Active Directory will authorize and authenticate all kind of users and their computers.
+
+LDAP ->> LDAP is the light weight Directory access protocol client-server protocol, it is used to access and manage the directory information.
+=>>LDAP is the open and cross-platform protocol used for directory services authentication.
+
+=>> Active Directory(AD) is the Active Directory Database and LDAP is the protocol used to talked with the AD
+
+***
+How LDAP works?
+
+Application (User provide their credential i.e. username and password) -> API/Service -> LDAP server/DB -> LDAP server provide the success/Faied response i.e.
+
+***
+
+=>>> Lightweight directory access protocol (LDAP) is a protocol that helps users find data about organizations, persons, and more. 
+=>>> LDAP has two main goals: 
+1) to store data in the LDAP directory and 
+2) authenticate users to access the directory
+
+
+****How LDAP works?
+What Is LDAP & How Does It Work? | Okta
+
+LDAP is an open, vendor-neutral application protocol for accessing and maintaining that data. LDAP can also tackle authentication, so users can sign on just once and access many different files on the server. LDAP is a protocol, so it doesn't specify how directory programs work
+
+**************************************************************************************************************************************************************
+
+HOW TO INSTALL APACHE LDAP DIRECTORY STUDIO
+-----------------------------------------------
+
+Google -> search for apache LDAP directory studio -> https://directory.apache.org/studio/  -> download for the specfic OS -> Istall the Installer as the Run as Administrator
+
+Download Link for apcahe LDAP directory ->> https://directory.apache.org/studio/download/download-windows.html
+
+
+*************************************************************************************************************************************************************
+

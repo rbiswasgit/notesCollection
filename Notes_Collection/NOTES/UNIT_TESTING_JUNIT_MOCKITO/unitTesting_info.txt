@@ -1,0 +1,245 @@
+UNIT TESTING - JUNIT - MOCKITO
+************************************
+************************************
+
+Reference -
+
+GitHub Repo :
+ https://github.com/in28minutes/spring-unit-testing-with-junit-and-mockito
+
+JUnit 5 Guide: 
+ https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/junit5.md
+
+*********************************************************************************************************************************************************
+
+Reference =
+https://howtodoinjava.com/spring-boot/spring-boot-app-closes-with-exit-code-0/
+
+
+
+*********************************************************************************************************************************************************
+*********************************************************************************************************************************************************
+
+>>> UNIT TESTING EXAMPLE
+---------------------------
+---------------------------
+
+
+1)create a springboot project - using Spring Initializer
+
+add dpendency - web , devtools
+
+2)important import class - unit test classes
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+
+
+
+
+3)Create/write - Controller , Service layer , DAO layer - MVC/Springboot/REST API application
+
+Example -
+
+a) 
+
+>>> Create a sample/example service class which has one method that will do summation (src/main/java)
+
+File - SomeBusinessImpl.java
+
+public class SomeBusinessImpl {
+
+  public int calculateSum(int[] data){
+        int sum = 0;
+        for(int value : data){
+            sum =sum + value;
+        }
+        return sum;
+    }
+}
+
+>> create a test class for the above Business/service layer class (src/test/java)
+File - SomeBusinessImplTest.java
+public class SomeBusinessTest {
+
+    @Test
+    public void calculateSum_basic(){
+        SomeBusinessImpl business = new SomeBusinessImpl();
+        int actualResult = business.calculateSum(new int[] {1,2,3});
+        int expectedResult = 6;
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void calculatrSum_empty(){
+        SomeBusinessImpl business = new SomeBusinessImpl();
+        int actualResult = business.calculateSum(new int[] {});
+        int expectedResult = 0;
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void calculateSum_oneVale(){
+        SomeBusinessImpl business = new SomeBusinessImpl();
+        int actualValue = business.calculateSum(new int[] {5});
+        int expectedValue = 5;
+        assertEquals(expectedValue,actualValue);
+    }
+
+}
+
+
+b)
+
+>>> Create a service class which reads the data from the DAO layer (DAO layer is an interface )
+
+File - SomeBusinessImpl.java
+
+public class SomeBusinessImpl {
+
+    //setter injection - injecting Data layer
+    private SomeDataDao someDataDao;
+    public void setSomeDataDao(SomeDataDao someDataDao) {
+        this.someDataDao = someDataDao;
+    }
+
+    public int calculateSum_dao(){
+        int sum=0;
+        int data[] = someDataDao.retriveAllData();
+        for(int value: data){
+            sum = sum+value;
+        }
+        return sum;
+     }
+}
+
+
+>>>create an interface for DAO layer 
+File - SomeDataDao.java
+
+public interface SomeDataDao {
+
+    public int[] retriveAllData();
+}
+
+OPTION 1- create stub - STUB
+
+>>>create a test class for the above service layer  and create a stub for the data layer
+(tradional way stub is created in order to test the data layer data)
+(unit test case is created for service layer)
+
+File -SomeBusinessStubTest.java
+
+class StubSampleData implements SomeDataDao {
+
+    @Override
+    public int[] retriveAllData() {
+        return new int[] {1,2,3};
+    }
+}
+
+class SampleEmptyStub implements SomeDataDao{
+
+    @Override
+    public int[] retriveAllData() {
+        return new int[] {};
+    }
+}
+
+class SampleOneValueStub implements SomeDataDao{
+
+    @Override
+    public int[] retriveAllData() {
+        return new int[] {5};
+    }
+}
+
+public class SomeBusinessStubTest {
+
+    @Test
+    public void calculateSum_stub_basic(){
+        SomeBusinessImpl business = new SomeBusinessImpl();
+        business.setSomeDataDao(new StubSampleData());
+        int actualResult = business.calculateSum_dao(); //new int[] {1,2,3}
+        int expectedResult = 6;
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void calculatrSum_stub_empty(){
+        SomeBusinessImpl business = new SomeBusinessImpl();
+        business.setSomeDataDao(new SampleEmptyStub());
+        int actualResult = business.calculateSum_dao(); //new int[] {}
+        int expectedResult = 0;
+        assertEquals(expectedResult,actualResult);
+
+    }
+
+    @Test
+    public void calculateSum_stub_oneVale() {
+        SomeBusinessImpl business = new SomeBusinessImpl();
+        business.setSomeDataDao(new SampleOneValueStub());
+        int actualResult = business.calculateSum_dao();
+        int expectedResult = 5;
+        assertEquals(expectedResult,actualResult);
+    }
+
+}
+
+OPTION 2 - MOCKING (USING MOCKITO)
+
+
+
+
+
+
+
+OPTION 3 - REFACTORING MOCKITO
+
+
+
+OPTION 4 - SPIKE
+
+
+**********************************************************************************************************************************************************
+**********************************************************************************************************************************************************
+
+
+SPRINGBOOT - REST API - MVC BASED - UNIT TESTING
+----------------------------------------------------
+
+1) WITHOUT DB ->> controller >> service >> DAO
+
+src/main/java
+--------------
+
+
+
+
+
+src/test/java
+--------------
+
+
+
+
+
+2) WITH DB - H2 DATABASE   ->> copntroller >> service >> DAO
+
+
+src/main/java
+--------------
+
+
+
+
+
+
+
+src/test/java
+-------------- 
+
+
+
+

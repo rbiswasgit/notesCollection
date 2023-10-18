@@ -1,0 +1,72 @@
+FUNCTIONS
+*********************
+
+1. CONCAT
+
+** Concatenation can be done with concat() as well as || (pie) symbol also
+
+select 'my name is ' || ename as "Employee Name"
+from emp;
+select concat('my name is ' , upper(ename)) as "Employee Name"
+from emp;
+
+select concat('My name is ',ename) as "Emp Name" from emp;
+
+
+2. INITCAP()
+
+-> initialize the first letter
+
+select initcap('my name is riya biswas acharjee')
+from dual;
+
+
+3.DUAL
+
+-> DUAL is the default table in Oracle which contains 1row and 1column. Besides, no. of rows and columns are flexible 
+-> default column name is DUMMY and contains default value x
+
+select *from DUAL;
+select 'pizza' as Food , 'Cold Drink' as Drink , 'Razma Chawal' as Meal
+from dual;
+
+
+4. length() 
+
+-> ruturns athe length of the string including space.
+select ename ,length(ename) as Length
+from emp;
+
+select ename, length(ename) as Length
+from emp
+where length(ename) = 6;
+
+5. UPPER() AND LOWER()
+
+select lower(ename) as "Employee Name",ename
+from emp;
+
+select ename , upper(job) from
+emp
+where upper(job) = 'ANALYST';
+
+
+6. SUBSTR(String/digt value , starting position , no. of letters/digit to be cut)
+
+select 'hello' , substr('hello' , 2 ,3) as "Substring Function"
+from dual; //o/p ell
+
+select substr('hello my name is Riya Biswas Acharjee' , 6) as "String Function"
+from dual;
+
+
+select substr('hello my name is Riya Biswas Acharjee' , 5) as "String Function"
+from dual;  //o/p  o my name is Riya Biswas Acharjee
+
+
+======================================================================================================================
+
+Assignments :-
+--------------------
+
+1. write a query that returns 

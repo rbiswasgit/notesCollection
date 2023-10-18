@@ -1,0 +1,295 @@
+hasicorp Vault , ADO , MFA ,
+
+Azull jdk17 , Gradle , GitHub, STS(spring tool suite) / Intellij IDEA,gradle, postman/insomia REST , springboot 2.6 , Docker Desktop, zipkin , junit/Mockito
+DNS(BlueCat) ,SSL(KeyFactor) , Vault , Firewall(Tufin) , Azure Cosmos DB , NATS Messaging queue , event driven springboot microservice ,Proxy server, LDAP
+
+
+Gradle
+kafka
+MongoDB - studio 3t GUI for MongoDB
+springBoot + MongoDB
+junit/Mockito
+Event Driven springboot microservices
+GitHub
+
+
+****************************************************************************************************************************************************
+
+HASHICORP VAULT
+******************
+
+
+
+
+
+
+
+****************************************************************************************************************************************************
+
+DNS (Domain Name System)
+***************************
+
+->> DNS resolves domain names to I.P address.
+->> In an network, computers are identified using IP address
+->> when we hit the URL on the browser, DNS will resolves URL address into IP address
+->> For example - DNS acts as the PHONEBOOK , it searches with the domain name(URL address) and it returns with the IP address for the same.
+
+BROWSER -> URL Address(Hit the URL) -> Ex. www.Yahoo.com -> when the Machine does not find the IP address on its own cache memory then it look for the IP address on the Resolver server
+
+RESOLVER SERVER -> Resolver Server is the IPS(Internet Service Provide) -> when the Resolver server receives the URL address then look for the IP address in its own cache memory, when the Resolver server does not find the IP address on the Cache memory then it send the query/URL address to the ROOt SERVER
+
+ROOT SERVER -> It will help the Resolver with the secfic server name for the Domin, as www.yahoo.com , so ROOt SERVER will return the TLD server name as the Response to the RESOLVER SERVER
+
+TLD SERVER -> TLD server will hold the .com ,.net , .org domain related info , when the ROOT Server does not find the IP address for the same then it Returns the response to Resolver to check with AUTHORITATIVE NAME SERVER
+
+AUTHORITATIVE ROOT SERVER -> Resolver now check with the AUTHORITIVE ROOT SERVER after checking with TLD Server -> AUTHORITIVE ROOT SERVER knows everything about all the domain/servers , AUTHORITIVE ROOT SERVER will return the IP address of the URL/web address www.yahoo.com and return it back to the RESOLVER SERVER, RESOLVER SERVER then return the IP address to the Browser.
+
+**RESOLVER server will store the IP address for the domain name www.yahoo.com in its cache memory, so that it would not going to execute that process again rather when any request will come from the browser for the address www.yahoo.com , Resolver server will send the respective IP address from its Cache Memory
+
+
+BROWSER ->           RESOLVER SERVER
+(www.yahoo.com)						-> ROOT SERVER
+									-> TLD
+									-> AUTHORITIVE ROOT SERVER
+		  													 -> RESOLVER SERVER -> BROWSER 
+		  													                      (receive IP address)
+
+
+****************************************************************************************************************************************************
+
+SSL (SECURE SOCKET LAYER)
+***************************
+
+->>> SSL is required when we want to provide security to the data which is flow from one entity to another
+For Ex - 
+If data is transfered/flow between one server to another server or data is flow between browser and the server then if we need to provide security then SSL is used. means SSL provide security to the data which is flow between different entity on web.
+
+-->>> SSL security provides to data - SSL security types
+      -----------------------------------------------------
+
+1)Integrity
+
+>>>Integrity means Receiver will get the intact/exact data which has been sent from Sender, 
+without any modification/change or undesired change to the data.
+
+2)Authinticated
+
+>>>two entities should be authenticated,in order to perform data transfer
+
+3)Confidentiality
+
+>>>Authorize entity/user (Receiver) can only access or read the data which is send by the Sender.
+ Means unauthorize receiver can anot read the Sender's data.
+ Confidentiality is achived via encryption
+
+
+
+Position of SSL
+----------------
+
+Application Layer -> SSL (Secure Socket Layer) -> Transport Layer
+
+Sender ->      SSL              ->    Receiver
+	 Data     encrypted				 Receive Entrypted + added SSL header data
+	 		    +					 At the Receiver end, SSL layer will be removed and then dcrypt the encryted data
+	 		add SSL header
+	 		on the encrypted
+	 		data  
+
+
+SSL Protocol
+-------------
+
+1) SSL Handshake Protocol
+2) SSL Change Chiper spec Protocol
+3) SSL Alert Protocol
+4) SSL Record Protocol
+5) HTTP ,TCP,IP
+
+1) SSL Handshake Protocol
+
+>>SSL handshake protocol will establish a connection between Sender and Receiver
+In order to send data from sender and receiver and conncetion need to be establish between Sender and Receiver
+>>Besides SSL Handshake protocol will provide Authentication to the Sender and Receiver in order to send data.
+
+2)SSL Record Protocol
+>>> it provides Integrity and Confidentiality
+
+
+Note-
+JavaKeyStore (JKS) , TrustStore
+cacert
+self singed certificate
+
+*****************************************************************************************************************************************************
+
+INTELLIJ IDEA - IDE
+---------------------
+
+1) Download & Install =>  https://www.jetbrains.com/idea/download/#section=windows
+
+2) On Left side there is a Project folder
+ALt + 1
+
+3)Generate dependency on pom.xml
+
+code -> Generate -> Add Dependency -> select dependency
+
+4)Install dependency
+
+click on Maven option on Right side ->Life Cycle -> Install
+
+
+5) Project Structure
+
+File -> Project Structure
+
+Settings(Top right) -> Project Structure
+
+
+
+**Share Project on GitHub
+---------------------------
+
+
+1) VCS -> Share Project on GitHub -> Pop-Up window will come up for login into the GitHub account -> Repository will be
+
+Alt + 9 (all logs, earlier commit etc will be displayed)
+
+
+
+
+**Clone Project from GutHub
+
+global search =>> cntrl + shft + a/A
+
+=> change option Git to VCS
+
+File -> settings -> version control -> gitHub -> delete added account -> apply ->ok
+File -> settings -> vsersion control -> Directory Mappings -> delete root mapping -> apply -> ok
+
+Clone ->
+VCS -> Get from version control -> paste the GitHub repository URLfor cloning the repository
+
+*********************************************************************************************************************************************************
+
+GRADLE - BUILD TOOL
+**********************
+
+=>>> Installing gradle on Windows
+
+Google -> Search Gradle Install -> Official site of Gradle -> Installing Manually -> select Binary Only -> zip file will be downloaded -> unzip
+
+after unzip/extract the folder -> set the GRADLE_HOME (gradle extract file folder location) on user Variable under Enviorenment variable -> edit path under path tab of user variable (paste until bin folder location)
+
+==>>>>
+1) create gradle project by using CMD
+CMD >> gradle init
+D:\SPRINGBOOT_GRADLE_MONGODB_POC\Gradle_create_project_CMD_POC>gradle init
+
+CMD > gradle build
+D:\SPRINGBOOT_GRADLE_MONGODB_POC\Gradle_create_project_CMD_POC>gradle build   (build folder will be generated)
+D:\SPRINGBOOT_GRADLE_MONGODB_POC\Gradle_create_project_CMD_POC>gradlew.bat clean  (claen task will remove the build folder)
+D:\SPRINGBOOT_GRADLE_MONGODB_POC\Gradle_create_project_CMD_POC>gradlew.bat build   (build folder will be generated -- another gradle build option)
+D:\SPRINGBOOT_GRADLE_MONGODB_POC\Gradle_create_project_CMD_POC>gradle run  (run the application)
+D:\SPRINGBOOT_GRADLE_MONGODB_POC\Gradle_create_project_CMD_POC>gradle tasks (this command will listing out all the tasks i.e. run,build,clean etc.)
+
+
+
+==========================================================================================================================================================
+
+GRADLE - COMMANDS
+-------------------
+
+Intellij IDEA > Terminal > ./gradlew build
+                         > ./gradlew clean
+                         >./gradlew build
+                         > ./gradlew run -q
+
+
+GRADLE BUILD SCAN
+----------------------
+
+project folder location > CMD > gradlew.bat build scan
+
+
+GRADLE MANAGE DEPENDENCY
+--------------------------
+
+./gradlew dependencies --configuration runtimeClasspath -q
+
+Exclude Gradle Dependency
+*****************************
+
+File - build.gradle
+
+Example 1 -
+---------------
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation (group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.5.15'){
+		exclude(group = "org.springframework.boot", module = "spring-boot-devtools")
+	}
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+Example 2 -
+----------
+Exclude specific depenency/jar from multiple dependency
+
+File - build.gradle
+dependencies{
+ implementation
+ implementation
+
+} 
+
+configurations.implementation{
+	exclude(group="" , module = "")
+}
+
+
+**********************************************************************************************************************************************************
+
+How to check dependency version compatability with springboot version?
+
+
+=>>>  gradle dependency analyzer intellij plugin
+
+Gradle dependency analyzer is available on the right hand side of the Intellij IDEA IDE, click on Gradle -> you can see a icon on the right top , Depenfdency Analyzer
+
+************************************************************************************************************************************************************
+
+LDAP (Light Weight Directory Access Protocol)
+**********************************************
+
+=> LDAP is the Light Weight Directory Access Protocol
+=> by defination, LDAP is the standard protocol that works over IP network for accessing and maintaining directory data.
+
+Example-
+Company store their employees or resources details/information as a directory format on LDAP server.
+With the help of LDAP protocol , any employee within the organization can see the other employee related information through LDAP protocol over Intranet if permitted.
+
+=> Benefit, LDAP server directory data can be store and retrive in simple manner.
+=> LDAP server can be accessed through PORT 389 , TCP/UDP
+
+=> LDAP over SSL (LDAPS) server can be accessed through the PORT 636
+
+
+
+*************************************************************************************************************************************************************
+
+OpenAPI UI - Swagger Documentation
+------------------------------------
+
+1)openapi implement
+2)openapi with security/spring security
+3)openapi with global exception handling
+4)openapi with custom response object
+
+
+
+=============================================================================================================================================================
+
+

@@ -1,0 +1,56 @@
+Backend - ecomm
+----------------
+
+I.
+*************
+*************
+RELEASE 1.0 -  (Display Products with product category)
+**************
+**************
+
+Steps -
+------
+
+1)Set up database tables
+
+-->>> www.luv2code.com/ecommerce-starter-files
+
+2)Create a Springboot starter project - (start.spring.io)
+
+-->> Dependency
+spring-boot-starter-data-jpa
+spring-boot-starter-data-rest
+mysql-connector-java
+lombok
+
+3) Develop the entities -{ Product and ProductCategory }
+
+-->>> Create entities - Product and ProductCategory
+-->>> Productcategory - One productcategory will have multiple products , @OneToMany
+-->>> Product - Multiple product will have one productcategory - @ManyToOne
+
+4)Create a REST API with Spring data JPA Repository and Spring Data REST
+
+-->>>Spring Data REST will provide RESTAPI endpoints for free, we need to only create Entity class and Repository interface by extending JpaRepository
+
+-->>File - ProductReposity.class (interface)
+    ------------------------------
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.springbootecommerceproject.entity.Product;
+
+public interface ProductRepository extends JpaRepository<Product,Long> {
+
+}
+
+-->>> File - ProductCategoryRepository.class (Interface)
+      --------------------------------------
+
+@RepositoryRestResource(collectionResourceRel = "productCategory" , path="product-category")
+public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long>{
+
+}
+
+**where
+collectionResourceRel = "productCategory" ->> will add "productCategory" as JSON entity
+path="product-category" = productcategory entity api end point path as "htt://localhost:8080/api/product-category"

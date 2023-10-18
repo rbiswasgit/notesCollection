@@ -1,0 +1,709 @@
+
+Typescript (TS)
+----------------
+-----------------
+
+Reference = https://www.typescriptlang.org/
+
+
+>>Typescript is the superset of Javascript and ECMAScript
+>>Typescript supports Object orinted programming
+>>Typescript has IDE support , has compile time checking
+
+>> Web browser do not understand Typescript code , they only understand Javascript
+>> So, Typescript code need to be converted into Javascript code and it is known as Transpiling
+>> Transpiling is accomplished by tsc command
+
+c:/> tsc myCode.ts (compile code)
+{tsc command will generate the js file which is non-editable , every time we run the ts code it will generete JS file}
+c:/> node myCode.js (Run command)
+
+*********
+IMP NOTE :- Typescript generate .js file after compilation(tsc myCode.ts) , .js file will be always generate on every compilation
+>>.js file will be generated even there will be an error.
+ tsc --noEmitOnError myCode.ts
+ or
+ tsc --target ES5 --noEmitOnError myCode.ts
+
+***Configuring compiler option with tsConfig 
+>>>tsConfig.ts file will contain all the project related configuration ....so that we need not to write commands on the terminal
+eg..
+we can add --noEmitOnError , --target ES5 on the tsConfig file instead of writing on the terminal
+
+>>terminal -> cd folder_loc -> tsc --init 
+{tsConfig.json file will be generated with the above command}
+tsConfig.json
+-------------
+{
+"compilerOption":{
+"target':ES5,
+"noEmitOnError":true,
+...
+....
+
+}
+}
+============================================================================================================================================================
+=================================
+
+
+************ Compile and RUN TS file Steps ****************************
+-->>> Open VSCode 
+-->>> Create a Project Folder on the machine/pc
+-->>> Open the created folder on the VSCode
+-->>> Create a new file with the any file name with the .ts extension (.ts extension for TypeScript file)
+-->>> write some code/Typescript code
+-->>> Compile and Run the file
+
+Terminal - Compile - RUN Steps
+------------------------------
+tsc file_name.ts (tsc command will generate a .js file , in order to run the typescript file it need to be converted into javascript file)
+node file_name.js
+
+-->>> in the above command .js file will be generated whether there is an error or not.
+as we would not need .js file if we encountered an error.
+so, in order to handle this (means .js file will not be genereted if there is an error)
+Run the below commands on the terminal
+
+Terminal
+---------
+
+tsc --init (create a tsConfig.json file)
+tsc --build --clean  (delete/remove the unwanted .js genetated file and rebuild it)
+tsc        (compile the ts file....it will compile all the .ts extention file as we have added tsConfig.json file in the folder path)
+node file_name.js
+
+Note :- when we compile with the tsc command every time .js file will be generated as browser only understands javascript file
+
+**tsConfig.json file should contain the "noEmitOnError":true and "target':ES5
+
+tsConfig.json
+-------------
+{
+"compilerOption":{
+"target':ES5,
+"noEmitOnError":true,
+...
+....
+
+}
+}
+
+=============================================================================================================================================================
+
+ERRORS - SOLVED - CHECKPOINTS
+-------------------------------
+
+1)ERROR -1 - SyntaxError: Cannot use import statement outside a module
+
+-->>>Check tsConfig.json file and add the below line
+"module": "commonjs"
+
+-->>>Check package.json file and add the below line
+"type": "module"
+
+
+
+
+=======================================================================================================================================================================================
+TS Examples
+-----------------------------
+-----------------------------
+
+1) Variable Syntax
+
+let variable_name : type = value;
+{let firstName:string = "Riya"; }
+
+
+2)Template String
+
+let firstName = "Riya";
+let lastName = "Biswas";
+
+console.log("Hi" + firstName + "" + lastName);
+
+console.log(`Hi ${firstName} ${lastName}`);
+
+3) Loops and Arrays
+
+Loops and Arrays Example
+--------------------------
+>> for loop example
+for(let i = 0 ; i<5 ;i++){
+    console.log(i);
+}
+
+>> displaying a array values using for loop
+
+let reviews :number[] = [4,6,9,4.5,12,90];
+
+for(let i =0 ; i< reviews.length ; i++)
+{
+    console.log(reviews[i]);
+}
+
+
+>> calculate average , and display values using for loop
+
+let reviews :number[] = [4,6,9,4.5,12,90];
+let total:number = 0;
+
+for(let i =0 ; i< reviews.length ; i++){
+    console.log(reviews[i]);
+    total += reviews[i];
+}
+let average :number = total/reviews.length;
+console.log("Average = "+ average);
+
+
+>> using For loop , string array
+
+let sports : string[] = ["Golf","Cricket","Tennis","FootBall","Badminton"];
+
+for(let i=0 ; i<sports.length ;i++){
+    console.log(sports[i]);
+}
+
+
+>>>Display string array elements using , simplified For Loop and also use condition
+
+let sports : string[] = ["Golf","Cricket","Tennis","FootBall","Badminton"];
+
+/*for(let i=0 ; i<sports.length ;i++){
+    console.log(sports[i]);
+}*/
+
+//using simplified For loop
+
+for(let tempSports of sports){
+
+    if(tempSports == "Cricket"){
+        console.log(tempSports + " <<My favorite!!");
+    }
+    else{
+        console.log(tempSports);
+    }
+}
+
+=============================================================================================================================================================================================
+
+********** TypeScript Create Class / class - Defination
+
+>>create a class and assign value in the class properties and display results
+>> class name and ts file name can be same or different
+
+File Name - Customer.ts
+-----------------------
+class Customer{
+    firstName:string;
+    lastName:string;
+}
+
+let myCustomerObj = new Customer();
+myCustomerObj.firstName = "Riya";
+myCustomerObj.lastName = "Biswas";
+
+console.log("FirstName = " + myCustomerObj.firstName);
+console.log("LastName = " + myCustomerObj.lastName);
+
+>> create a class and constructor using fields and assign value and display the class properties
+
+class Customer{
+    firstName:string;
+    lastName:string;
+
+    constructor(theFirst:string , theLast:string){
+        this.firstName = theFirst;
+        this.lastName = theLast;
+    }
+
+}
+
+let myCustomerObj = new Customer("Riya","Biswas");
+
+console.log("FirstName = " + myCustomerObj.firstName);
+console.log("LastName = " + myCustomerObj.lastName);
+
+
+=============================================================================================================================================================================================
+
+************TS -  Accessors - getters/setters
+>> getters/setters can be generated on VSCode by double click on the variable/property name
+
+File Name - Customer.ts
+-----------------------
+class Customer{
+   /*private _firstName: string;
+   private _lastName: string;
+
+   //constructor - Traditional approach
+   constructor(theFirst:string , theLast:string){
+     this._firstName = theFirst;
+     this._lastName = theLast;
+     }
+ */
+ //Constructor defination - new approach - does not required to mention proprty name, at the same time
+ //property name and assignments will be created at the same time
+     constructor(private _firstName: string , private _lastName: string){
+
+     }
+
+//Access modifiers - getters/setters
+    public get lastName(): string {
+        return this._lastName;
+    }
+    public set lastName(value: string) {
+        this._lastName = value;
+    }
+
+    public get firstName(): string {
+        return this._firstName;
+    }
+    public set firstName(value: string) {
+        this._firstName = value;
+    }
+}
+
+let myCustomerObj = new Customer("Riya","Biswas");
+
+console.log("FirstName = " + myCustomerObj.firstName);
+console.log("LastName = " + myCustomerObj.lastName);
+
+
+>>>****************** Parameter properties - recent approach - constructor 
+
+class Customer{
+
+ //Constructor defination - new approcjh - does not required to mention proprty name, at the same time
+ //property name and assignments will be created at the same time - no need to mention propertyname/variable name separately
+
+     constructor(private _firstName: string , private _lastName: string){
+
+     }
+
+//Access modifiers - getters/setters
+    public get lastName(): string {
+        return this._lastName;
+    }
+    public set lastName(value: string) {
+        this._lastName = value;
+    }
+
+    public get firstName(): string {
+        return this._firstName;
+    }
+    public set firstName(value: string) {
+        this._firstName = value;
+    }
+}
+
+let myCustomerObj = new Customer("Riya","Biswas");
+
+console.log("FirstName = " + myCustomerObj.firstName);
+console.log("LastName = " + myCustomerObj.lastName);
+
+Terminal
+--------------
+tsc --init (create a tsConfig.json file)
+tsc --build --clean  (delete/remove the unwanted .js genetated file and rebuild it)
+tsc        (compile the ts file....it will compile all the .ts extention file as we have added tsConfig.json file in the folder path)
+node Customer.js (Run the file)
+
+============================================================================================================================================================================================
+
+***************** Modules - Class Export - Import ***************
+
+-->>> Create a folder within project folder - Create a TS file 
+
+File - Customer.ts (this class export)
+-------------------
+export class Customer{
+
+ //Constructor defination - new approach - does not required to mention proprty name, at the same time
+ //property name and assignments will be created at the same time
+     constructor(private _firstName: string , private _lastName: string){
+
+     }
+
+//Access modifiers - getters/setters
+    public get lastName(): string {
+        return this._lastName;
+    }
+    public set lastName(value: string) {
+        this._lastName = value;
+    }
+
+    public get firstName(): string {
+        return this._firstName;
+    }
+    public set firstName(value: string) {
+        this._firstName = value;
+    }
+}
+
+File - Driver.ts
+-----------------
+import { Customer } from "./Customer";
+
+let myCustomerObj = new Customer("Riya","Biswas");
+
+console.log("FirstName = " + myCustomerObj.firstName);
+console.log("LastName = " + myCustomerObj.lastName);
+
+Terminal
+--------
+tsc --init
+tsc --build --clean
+tsc
+node Driver.js
+
+=========================================================================================================================================================================================
+
+*************************** Inheritance *****************
+
+-->>> Create a Super class/Parent class Shape.ts , Shape.ts class is extends by Circle.ts and Rectangle.ts class ....Circle.ts and Rectangle.ts are Derived class 
+
+File - Shape.ts
+----------------
+
+export class Shape{
+
+    constructor(private _x: number , private _y: number){
+
+    }
+
+    //accessors - getters and setters
+    public get x(): number {
+        return this._x;
+    }
+    public set x(value: number) {
+        this._x = value;
+    }
+    
+    public get y(): number {
+        return this._y;
+    }
+    public set y(value: number) {
+        this._y = value;
+    }
+
+    //implementing getInfo()
+
+    getInfo() : string{
+        return `x= ${this._x} y= ${this._y}`;
+    }
+}
+
+File - Circle.ts
+-----------------
+
+import { Shape } from "./Shape";
+
+export class Circle extends Shape{
+
+    constructor(theX:number , theY: number ,private _radius: number){
+        super(theX,theY);
+    }
+
+    //Accessors - getters and setters for the 
+    public get radius(): number {
+        return this._radius;
+    }
+    public set radius(value: number) {
+        this._radius = value;
+    }
+
+    //override getInfo() method of parent class
+
+    getInfo(): string {
+        
+        return super.getInfo() + ` , radius= ${this._radius}`;
+    }
+
+}
+
+File - Rectangle.ts
+-------------------
+
+import { Shape } from "./Shape";
+
+export class Rectangle extends Shape{
+
+    //constructor
+    constructor(theX:number , theY:number , private _width: number,private _length: number){
+        super(theX,theY);
+    }
+
+    //Accessors - getters - setters
+
+    public get width(): number {
+        return this._width;
+    }
+    public set width(value: number) {
+        this._width = value;
+    }
+
+    public get length(): number {
+        return this._length;
+    }
+    public set length(value: number) {
+        this._length = value;
+    }
+
+    //override method
+    getInfo(): string{
+        return super.getInfo() + `width= ${this._width} , length = ${this._length}`;
+    }
+
+}
+
+File - Driver.ts
+----------------
+
+import { Circle } from "./Circle";
+import { Rectangle } from "./Rectangle";
+import { Shape } from "./Shape";
+
+let circleobj = new  Circle(10,20,50);
+let shapeObj = new Shape(30,90);
+let rectangleObj = new Rectangle(0,0,55,45);
+
+//console.log(circleobj);
+//console.log(shapeObj);
+
+console.log(circleobj.getInfo());
+console.log(shapeObj.getInfo());
+console.log(rectangleObj.getInfo());
+
+
+File - ArrayDriver.ts (Another form of calling the class using array)
+-----------------------------------------------------------------------
+
+import { Circle } from "./Circle";
+import { Rectangle } from "./Rectangle";
+import { Shape } from "./Shape";
+
+let circleobj = new  Circle(10,20,50);
+let shapeObj = new Shape(30,90);
+let rectangleObj = new Rectangle(0,0,55,45);
+
+//declare an array of shapes - Initially the array is empty
+
+let arrayShapes :Shape[] = [];
+
+//add Shapes to an array
+arrayShapes.push(shapeObj);
+arrayShapes.push(circleobj);
+arrayShapes.push(rectangleObj);
+
+//traverse through the shape array to print the getInfo()
+
+for(let tempShape of arrayShapes ){
+
+    console.log(tempShape.getInfo());
+}
+
+Terminal
+-----------
+tsc --buld --clean
+tsc
+node Driver.js (or node ArrayDriver.js)
+
+
+============================================================================================================================================================================
+
+**************************  Abstract Class - In TypeScript **********************
+
+-->> Abstract class contains a abstract method (which has only declared not defined)
+-->> Can not create an object/Instance of a Abstract class
+-->> the class which extends the abstract class can create the object and access the abstract class method.
+-->> Abstract class can contans abstract method as well as Defined method(contains body) , besides variables can be final static or not.
+
+File - Shape.ts
+----------------
+
+export abstract class Shape{
+
+    constructor(private _x: number,private _y: number){
+
+    }
+
+    //Accessors - getters - setters
+    public get x(): number {
+        return this._x;
+    }
+    public set x(value: number) {
+        this._x = value;
+    }
+
+    public get y(): number {
+        return this._y;
+    }
+    public set y(value: number) {
+        this._y = value;
+    }
+
+    //impleming getInfo()
+    getInfo():string{
+        return `X=${this._x} Y=${this._y}`;
+    }
+
+    //declare abstract method
+    abstract calculateArea() : number;
+
+}
+
+File - Circle.ts
+----------------
+
+import { Shape } from "./Shape";
+
+export class Circle extends Shape{
+    
+    constructor(theX:number, theY:number ,private _radius: number ){
+        super(theX,theY);
+    }
+
+    //Accessotrs - getters -setters
+
+    public get radius(): number {
+        return this._radius;
+    }
+    public set radius(value: number) {
+        this._radius = value;
+    }
+
+    //Override getInfo() method
+    getInfo() : string{
+        return super.getInfo() + `radius = ${this._radius}`;
+    }
+
+    //implementing Abstract method
+    calculateArea(): number {
+        return Math.PI * Math.pow(this._radius,2);
+    }
+
+}
+
+File - Rectangle.ts
+--------------------
+
+import { Shape } from "./Shape";
+
+export class Rectangle extends Shape{
+   
+    constructor(theX:number , theY:number , private _width:number , private _length:number){
+        super(theX,theY);
+    }
+
+    //Accessors - getters - setters
+    public get width(): number {
+        return this._width;
+    }
+    public set width(value: number) {
+        this._width = value;
+    }
+     
+    public get length(): number {
+        return this._length;
+    }
+    public set length(value: number) {
+        this._length = value;
+    }
+
+    //Override getInfo()
+    getInfo(): string {
+        return super.getInfo() + `, width=${this._width} length=${this._length}`;
+    }
+    
+    //implementing Abstruct method
+    calculateArea(): number {
+        return this._width * this._length;
+    }
+
+    
+}
+
+File - ArrayDriver.ts
+----------------------
+
+import { Circle } from "./Circle";
+import { Rectangle } from "./Rectangle";
+import { Shape } from "./Shape";
+
+let circleObj = new Circle(10,20,5);
+let rectangleObj = new Rectangle(0,0,30,50);
+
+let arrayShape : Shape[] = [];
+arrayShape.push(circleObj);
+arrayShape.push(rectangleObj);
+
+for(let tempArray of arrayShape){
+    console.log(tempArray.getInfo());
+    console.log(tempArray.calculateArea());
+}
+
+========================================================================================================================================================================================
+
+
+************************** Interface - In TypeScript ************************
+
+File - Coach.ts (Interface)
+----------------
+
+export interface Coach{
+ 
+    getDailyWorkOut() : string;
+
+}
+
+File - CricketCoach.ts (Implemented Class)
+-----------------------
+
+import { Coach } from "./Coach";
+
+export class CricketCoach implements Coach{
+
+    getDailyWorkOut(): string {
+        return "Cricket Coach ->> Daily Batting Practice!!!!";
+    }
+
+    
+}
+
+File - GolfCoach.ts (Implemented Class)
+--------------------
+
+import { Coach } from "./Coach";
+
+export class GolfCoach implements Coach{
+    getDailyWorkOut(): string {
+        return "Goalf Coach ->>> daily practice!!!! ";
+    }
+    
+}
+
+File - DriverArray.ts
+----------------------
+
+import { Coach } from "./Coach";
+import { CricketCoach } from "./CricketCoach";
+import { GolfCoach } from "./GolfCoach";
+
+let myCricketCoach = new CricketCoach();
+let myGolfCoach = new GolfCoach();
+
+let coachArray : Coach[] = [];
+coachArray.push(myCricketCoach);
+coachArray.push(myGolfCoach);
+
+for(let tempCoach of coachArray){
+    console.log(tempCoach.getDailyWorkOut());
+}
+
+Terminal
+---------
+tsc --init
+tsc
+node DriverArray.js

@@ -1,0 +1,343 @@
+Design Patters
+******************
+
+MVC Design Pattern
+Creational Pattern (Factory Method Pattern ,Abstract Factory Pattern , Singleton, Prototype, Builder)
+Structural Pattern (Adapter , Bridge, Composite , Decorator, Facade, proxy)
+Behavioral Pattern (Command, Interpreter ,Iterator, Observer, State, Strategy, Template)
+J2EE Pattern
+
+=>>>> Best practices are called as Design Patterns.
+
+Principles of Design Pattern
+*********************************
+
+Principles of Design Patterns:
+1. Composition over inheretance is always preferred.
+2. Code for interface not for implementation.
+
+Types of Design Patterns:
+-------------------------------
+1. Creational
+2. Structural
+3. Behavioural
+
+A. Creational Design Pattern:
+--------------------------------
+1. Singleton
+2. Factory
+3. Abstract factory
+4. Builder
+5. Prototype
+
+B. Structural Design Patterns
+---------------------------------
+6. Adapter
+7. Composite
+8. Proxy
+9. Fly weight
+10. Facade
+11. Bridge
+12. Decorator
+
+C. Behavioural
+----------------------------------
+13. Template Method
+14. Mediator
+15. Chain of Responsibility
+16. Observer
+17. Strategy
+18. Command
+19. State
+20. Visiter
+21. Iterator
+22. Interpretor
+23. Memento
+
+
+
+Design Pattern
+*********************
+
+=>> when we create a software , we should follow the best practices
+=>> best practices are Degin pattern
+
+=>> Design Pattern are created on the basis of the common problems which are asises during the Software Development
+
+=>> we should use the Design Patterns/Best Practices on the basis of the requirement
+
+=>> Design Patterns are categorized/group into several categories
+Creational Design Pattern = it is about Object Creation
+
+Structural Design Patten = it is about Object Compose (if one onject placed inside another object) 
+Ex - Obeject1 has some features and Object2 has some features and Object2 wants to use the Object1 means Object2 compose Object1
+
+Behavioral Design Patten = it is about communication with two objects
+Ex- there are two objects , where Object1 and Object2 wants a communication not compose
+
+
+Factory Design Pattern
+**************************
+
+=>>> Factory Design Pattern comes under Creational Design Pattren
+
+Example -
+
+one software contains OS interface which is implemented by several different OS(like Andoid, IOS , Windows etc)
+So, object creation for the different OS is not concern for the user/developer
+
+Factory is reponsible for creating the object
+
+=>>> In case of Factory Design Pattern , a class is responsible for creating the object
+=>>> 
+Ex-
+we have 1 interface and which is implemented by the different 2 or more classess
+So, in order to create the object of the implemted class, which is handled by a sigle class which will be generate Objects
+
+Example - 
+
+1)
+public interface OS {
+	void spec();
+}
+
+2)
+public class AndroidOs implements OS {
+	@Override
+	public void spec() {
+		System.out.println("Inside Android!!!!");
+	}
+}
+
+3)
+public class IOSOs implements OS {
+	@Override
+	public void spec() {
+		System.out.println("Inside IOS!!!!");
+	}
+}
+
+4)
+public class WindowsOs implements OS {
+	@Override
+	public void spec() {
+		System.out.println("Inside Windows OS!!!");
+	}
+}
+
+5)
+
+/*
+ * In case of Factory design pattern , a single class is responsible for the generating Objects
+ * 
+ * 
+ */
+public class ObjectGeneratorFactory {
+	
+	public OS getInstance(String str){
+		
+		if(str.equals("Open")){
+			return new AndroidOs();
+		}
+		else if(str.equals("Closed")){
+			return new IOSOs();
+		}
+		else{
+			return new WindowsOs();
+		}
+	}
+
+}
+
+6)
+public class FactoryDesignPattenDemo {
+
+	public static void main(String[] args) {
+		// main method implementation
+	
+		//In this case we have to manually change the client logic every time when we need to use any other implemented
+		//class object
+		//OS obj1 =  new AndroidOs();
+		//obj1.spec();
+		//OS obj2 = new IOSOs();
+		//obj2.spec(); 
+		
+		//this below class is responsible for generating objects
+		//we need not not change the client code rather client can come to know about the how/which object is generated
+		ObjectGeneratorFactory factory = new ObjectGeneratorFactory();
+		
+		OS obj = factory.getInstance("Open");
+		obj.spec();
+		
+	}
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Builder Design Pattern
+*************************
+
+=>> Builder Design Pattern comes under Creational Design Pattern
+
+=>> Builder design pattern is used when we want to initialize/create object but for selected field/variables not all the variables of the class
+
+For Example - 
+
+/*
+=>> By default we have to provide all the parameter value to the parameterized constructor
+
+
+*/
+1)
+public class Phone {
+
+	private String os;
+	private int ram;
+	private String processor;
+	private double screensize;
+	private int battery;
+	
+	public Phone(String os, int ram, String processor, double screensize, int battery) {
+		super();
+		this.os = os;
+		this.ram = ram;
+		this.processor = processor;
+		this.screensize = screensize;
+		this.battery = battery;
+	}
+
+	@Override
+	public String toString() {
+		return "Phone [os=" + os + ", ram=" + ram + ", processor=" + processor + ", screensize=" + screensize
+				+ ", battery=" + battery + "]";
+	}	
+
+}
+
+
+2)
+public class Shop {
+
+	public static void main(String[] args) {
+		
+		//here in this case we need to provide all the parameter values to the Constructor and it is mandatory otherwise it will 
+		//provide the compilation error
+		
+		Phone p = new Phone("Android",2,"QualCom",5.5,3100);
+		System.out.println(p);
+
+	}
+
+}
+
+Note =>
+In order to initialize only selected variables of the Class , we should use Builder design Pattern
+=>> Implementing Builder Design Pattern
+
+////Implementing Builder Design Pattern - here only specific variables to be initialized instead of the whole object
+
+1)
+public class Phone {
+
+	private String os;
+	private int ram;
+	private String processor;
+	private double screensize;
+	private int battery;
+	
+	public Phone(String os, int ram, String processor, double screensize, int battery) {
+		super();
+		this.os = os;
+		this.ram = ram;
+		this.processor = processor;
+		this.screensize = screensize;
+		this.battery = battery;
+	}
+
+	@Override
+	public String toString() {
+		return "Phone [os=" + os + ", ram=" + ram + ", processor=" + processor + ", screensize=" + screensize
+				+ ", battery=" + battery + "]";
+	}	
+
+}
+ -> no change in Phone class
+
+ 2)
+ public class PhoneBuilder {
+	
+	private String os;
+	private int ram;
+	private String processor;
+	private double screensize;
+	private int battery;
+	
+	public PhoneBuilder setOs(String os) {
+		this.os = os;
+		return this;
+	}
+	public PhoneBuilder setRam(int ram) {
+		this.ram = ram;
+		return this;
+	}
+	public PhoneBuilder setProcessor(String processor) {
+		this.processor = processor;
+		return this;
+	}
+	public PhoneBuilder setScreensize(double screensize) {
+		this.screensize = screensize;
+		return this;
+	}
+	public PhoneBuilder setBattery(int battery) {
+		this.battery = battery;
+		return this;
+	}
+	
+	public Phone getPhone(){
+		return new Phone(os,ram,processor,screensize,battery);
+	}
+
+}
+
+
+3)
+
+public class Shop {
+
+	public static void main(String[] args) {
+		
+		//here in this case we need to provide all the parameter values to the Constructor and it is mandatory otherwise it will 
+		//provide the compilation error
+		
+		//Phone p = new Phone("Android",2,"QualCom",5.5,3100);
+		//System.out.println(p);
+		
+		//Implementing Builder Design Pattern
+		Phone p = new PhoneBuilder().setOs("Android").setBattery(3500).getPhone();
+	}
+
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Adapter Design Pattern (Structural Design pattern)
+***************************************************
+
+=>>>  Adapter Design pattern is the Structural Design Pattern
+
+Refer - notebook
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Abstract Factory Method Design Pattern (Creational design Pattern)
+*********************************************************************
+
+=>> Creational Design Pattern is responsible for creating objects which belongs to the family of similar objects
+
+=>> Implemented using Common interface
+
+Example -  Java -DocumentBuilder
+
+=>> Abstract Factory Design PAttern is the Factory of Factory design pattern

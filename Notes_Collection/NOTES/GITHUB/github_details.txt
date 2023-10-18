@@ -1,0 +1,239 @@
+==========================================
+
+username = riyagithub30
+passwprd = amibhalo30
+email id = rbiswas30@gmail.com
+status = Active
+
+==========================================
+
+Git user name = rbiswasgit
+password = amibhalo30
+email = riyaluv2code@gmail.com
+password = luv2code
+Status = Active
+
+---------------------------------------------------
+*******************************************************************************************************************************************
+*********************************
+
+ERROR 
+
+1)
+D:\GitHub_repository\springboot-restfull-webservice>git push
+remote: Permission to riyagithub30/springboot-restfull-webservice.git denied to rbiswasgit.
+fatal: unable to access 'https://github.com/riyagithub30/springboot-restfull-webservice/': The requested URL returned error: 403
+
+Solution Steps -
+
+windows search ->> windows credential ->>> remove github.com related credential
+
+CMD >>
+git remote set-url origin https://github.com/riyagithub30/springboot-restfull-webservice
+git config --global user.name "your username"
+git config --global user.password "your password"
+
+
+
+********************************************************************************************************************************************
+*******************************
+
+
+1.
+Create a github account
+
+https://github.com/
+Git user name = rbiswasgit
+password = amibhalo30
+
+2.
+Create a github repository
+
+Profile ->> yours repository ->> new ->> provide github repository name
+
+3.
+Create a folder on local machine with the name same as github repository name
+i.e. github-basics
+
+and drag down that folder on the VS Code
+
+4. push an existing repository from the command line
+
+git remote add origin https://github.com/rbiswasgit/github-basics.git
+
+git push -u origin main
+
+VSCode Terminal >>
+
+cd project-folder-name
+git init
+git add .
+git commit -m "message"
+git remote add origin https://github.com/rbiswasgit/github-basics.git
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+git push origin master
+
+
+**  
+  git remote add origin https://github.com/rbiswasgit/github-basics.git
+  git config --global user.name "your username"
+  git config --global user.password "your password"
+
+***
+git remote set-url origin https://<username>@github.com/Path_to_repo.git
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+Command Line Commands
+------------------------
+
+>> git branch
+(gives only remote branch)
+
+>>git branch -a
+(gives remote branch name as well remote-origin branch name) 
+
+>>git checkout -b feature  (create a branch feature)
+
+>>git branch -a
+>>git branch (till now there is no feature branch is created on the guthub remote webpage)
+
+-->>>after creating branch from cmd (git checkout -b feature) , add a folder on VSCode project (feature/f1.txt)
+
+>>git add .
+>>git commit -m "added feature"
+>>git push origin feature
+
+>>git branch
+>>git branch -vv (provide detailed about branches)
+>>git branch -a
+>>git ls-remote (provide all available remote branches)
+
+
+>>git fetch origin
+>>git pull origin master (pull command is the combination of fetch and merge)
+---------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------
+Fork
+------
+->>>Fork meaning cloning a project from the one account/repo to another account/repo
+->>>meaning copy a project from another
+->>>in order to merge the changes at first pull request is triggered then merge operation is performed (pull request = fetch + merge )
+
+
+======================================================================================================================================================================================
+Project Setup -
+-------------------
+
+1) User - 1
+  ------------------
+get the project code on VSCode
+
+2)
+VSCode Terminal >> npm install (for npm to start work i.e. npm (node package manager) nodejs need to be installed
+>> npm start
+
+3)
+->>>after npm install command node_modules folder is created which contains the all the third pary dependency folders
+->>>node_modules folder need not to be tracked by the git as node_modules folder is third party dependency...that is why node_modes need to be added on the .gitignore file
+
+-->>> .gitignore file require, in order to add files which are not needed to be tracked
+
+-->>> npm install add the dependency based on the dependency present on the package.json file (package.json file is similar to pom.xml file)
+
+4)
+
+npm install
+npm start
+add .gitignore file on the root folder location (add node_modules , .DS_ Store)
+-->>>>VSCode treminal >>
+git init
+git status
+git add.
+git commit -m "message"
+git branch
+git branch -m master main (rename branch name)
+
+5)
+->>> after initializing git and rename the branch name
+
+VSCode Terminal >> npm start
+
+6)
+->> perform code change
+
+7)
+->>>after performing code change
+->>
+git checkout -b feat/cart-logic (create a branch)
+git add .
+git commit -m "added cart visibility"
+
+8)
+->>create a repository on github aacount
+
+9)
+-->>>git remote add origin https://github.com/rbiswasgit/reactjs-food-order.git
+git add .
+git commit -m "added reactjs cart-logic"
+git push origin main
+
+10) User - 2
+   ----------------
+-->>>> after pusing the code on main(master) branch of collaborator1
+>>>clone the repo by the user 2 on the VSCode
+git clone https://github.com/rbiswasgit/reactjs-food-order-01.git
+npm install
+npm start
+
+->>>
+add cart.js, css file on the Cart folder under component folder. 2 files can be download
+edit App.js --> add 2 contents
+import Cart from './components/Cart/Cart';
+<CartProvider>
+      <Cart /> <---add this tag
+      <Header />
+
+->>>npm start
+
+-->>>
+git init
+git checkout -b feat/cart
+git add .
+git commit -m "added cart.js us2"
+
+
+--->>add collaborator by user1....and the invite should be accepted via email
+
+========>>>>>>>>>>>===========>>>>>>>>
+Merging
+
+--->>>>owner / user1(max) has two branch -- main , feat/cart-logic
+---->>>>Collaborator/ user2(manual) has 2 branch ---main(clone) , feat/cart (added new file)
+
+==>>> atfirst max has pushed its changes to main branch but latest modified code on feat/cart-logic branch has not yet pushed / merged
+1. merge main branch with feat/cart-logic branch (max) - rbiswasgit
+
+git branch
+hit checkout main
+git pull
+git merge feat/cart-logic
+
+2. merge main branch with feat/cart branch
+
+git branch
+git branch -a
+git checkout main
+git merge feat/cart
+
+{if any conflict occurs...correct it}
+
+git add .
+git commit -m "conflict corrected"
+
+
+
+*************************************************************************************************************
+
+Accesing code via Fork
+---------------------------

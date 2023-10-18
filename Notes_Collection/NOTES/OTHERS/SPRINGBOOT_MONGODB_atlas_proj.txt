@@ -1,0 +1,43 @@
+SPRINGBOOT + MONGODB 
+***********************
+
+-> Here backend springboot application will be connected with the cloud MongoDB(MongoDB Atlas)
+
+MongoDB - MongoDB Atlas (cloud)
+***********************************************************************************************************************************************************
+
+Login credential of MongoDB Atlas
+biswas3007riya@gmail.com
+MangoR30@
+
+MongoDB Atlas - cluster (rb-codeinfo-cafe)
+--------------------------------------------
+DB credential - root root
+
+Reference SpringBoot+Mongo =
+https://github.com/navinreddy20/SpringMongoDB
+
+Reaference UI =
+https://github.com/navinreddy20/UISpringMongodb
+
+Reference -springBoot CRUD REST APi
+https://medium.com/codestorm/build-a-restful-crud-api-with-spring-boot-and-jpa-fd97e7f02615
+
+Reference - springboot REST API Global Exceptional Handling
+https://springframework.guru/exception-handling-in-spring-boot-rest-api/
+https://www.youtube.com/watch?v=hLlGAQ5NfTE
+
+Referencre http status Code info 
+https://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete
+
+Reference - SpringBoot + OpenAPI UI Swagger
+https://ruuben.medium.com/documenting-spring-boot-2-5-x-apis-using-openapi-3-0-6334984c6744
+https://dzone.com/articles/doing-more-with-springdoc-openapi
+
+****************************************************************************************************************************************************
+
+
+
+
+
+

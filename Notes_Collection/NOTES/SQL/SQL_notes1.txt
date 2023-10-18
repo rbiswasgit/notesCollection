@@ -1,0 +1,618 @@
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------
+Online Editor
+---------------
+
+https://apex.oracle.com/en/
+
+>>>Get Started for free >> Requets for free workspace
+
+riya_sql_ws
+rbiswas30@gmail.com
+apexpass30
+
+Online SQL editor  -
+
+https://www.programiz.com/sql/online-compiler/
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Online Tutorial
+---------------
+
+https://www.techonthenet.com/index.php
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+BETWEEN CLAUSE
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT *FROM EMP WHERE SAL BETWEEN 1250 AND 3000;
+
+=> BETWEEN CLAUSE WILL FETCH THE VALUE RANGES FROM 1250 TO 3000 , INCLUDING 1250 AND 3000 RECORD VALUE.
+
+BUT 
+
+SELECT *FROM EMP WHERE
+SAL > 1250 AND SAL <3000;
+
+=>> FOR GREATER THAN (>) AND LESSTHAN (<) SYMBOL/OPERATOR WILL NOT INCLUDE THE 1250 AND 3000 DATA RATHER IT WILL FETCH DATA WITHIN THAT RANGE.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q. RETURN THE EMPLOYEE THOSE ARE SALESMAN AND THAT MAKE THEIR 300 DOLLAR IN COMMISSION OR GREATRE THAT 1000 DOLLAR IN COMMISSION
+
+SELECT *FROM EMP
+WHERE 
+JOB = 'SALESMAN' AND
+(COMM =300 OR COMM > 1000); // PARATHESIS CONSIDER AS THE SINGLE STATEMENT/CONDITION TO BE CHECKED (OR OPERATOR MEANS EITHER ONE OF THE OPTION IS CORRECT)
+
+*******************************************************************************************************************************************************************
+NULL VALUE CHECK 
+
+select *froM EMP
+WHERE COMM IS NOT NULL; //RETURN THE VALUE FROM COMM COLUMN WHICH ARE NOT NULL.
+
+
+========================================================================================================================================================
+ALIASE
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT ENAME "EMPLOYEE NAME" , SAL AS SALARY,COMM COMMISION
+FROM EMP;
+
+SELECT 'HELLO MY NAME IS ' || ENAME AS "DESCRIPTION"
+FROM EMP WHERE JOB = 'MANAGER';
+
+SELECT ENAME || ' MAKES $' || SAL || ' PER MONTH' AS "EMPLOYEE INCOME"
+FROM EMP;
+
+*** || (pipes) are used for concatenation.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ORDER BY
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT DEPTNO,SAL,ENAME
+FROM EMP ORDER BY DEPTNO,SAL
+
+NOTE= in case of ORDER BY clause, i.e. records are displayed in ascending order(smallest-> largest) by default
+records are arranged in asc order of DEPTNO and then with respect to deptno SAL value are arranged in asc order.
+
+DEPTNO	SAL	ENAME
+10	1300	MILLER
+10	2450	CLARK
+10	5000	KING
+20	800	    SMITH
+20	1100	ADAMS
+20	2975	JONES
+20	3000	SCOTT
+20	3000	FORD
+30	950	    JAMES
+30	1250	MARTIN
+30	1250	WARD
+30	1500	TURNER
+30	1600	ALLEN
+30	2850	BLAKE
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ASSIGNMENT
+------------
+
+1.Write a query that retrieves suppliers that work in either Georgia or California.
+
+   SELECT *FROM SUPPLIERS WHERE STATE IN('Georgia' , 'California');
+
+OR
+   SELECT *FROM SUPPLIERS WHERE STATE ='Georgia' OR STATE= 'California';
+
+2. Write a query that retrieves suppliers with the characters "wo" and the character "I" or "i" in their name.
+
+   SELECT *FROM SUPPLIERS WHERE SUPPLIER_NAME LIKE '%wo%' AND SUPPLIER_NAME IN ('%I%' , '%I%');
+
+3.Write a query that retrieves suppliers on which a minimum of 37,000 and a maximum of 80,000 was spent.
+
+   SELECT *FROM SUPPLIERS WHERE TOTAL_SPENT BETWEEN 37000 AND 80000;
+
+4.Write a query that returns the supplier names and the state in which they operate meeting the following conditions:
+
+belong in the state Georgia or Alaska
+
+the supplier id is 100 or greater than 600
+
+the amount spent is less than 100,000 or the amount spent is 220,000
+
+
+SELECT SUPPLIER_NAME ,STATE FROM SUPPLIERS WHERE
+STATE IN(Georgia,Alaska) AND (SUPPLIER_IN = 100 OR SUPPLIER_ID > 600) 
+AND (TOTAL_SPENT < 100000 OR TOTAL_SPENT = 220000);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Function is the predefined program which will perform some/ perticular task
+
+Single Row Function(SRF)
+
+These are those function which are working on the single row
+
+1. CONCAT
+
+** Concatenation can be done with concat() as well as || (pie) symbol also
+
+select 'my name is ' || ename as "Employee Name"
+from emp;
+select concat('my name is ' , upper(ename)) as "Employee Name"
+from emp;
+
+select concat('My name is ',ename) as "Emp Name" from emp;
+
+2. UPPER
+
+select upper('hello') from emp;
+
+select 'hello' from emp;
+
+3.DUAL table
+
+select * from DUAL;
+
+select lower('hello RIYA') from dual;
+
+select 'Pizza' as FOOD , 'Frappe' as DRINK from DUAL;
+
+
+4. SRF within Function
+
+select concat(concat(lower(ename), upper('is the name')) , concat(lower(' and their job is: ') , upper(job))) as Sentence from emp;
+
+**
+select *from emp
+where
+LOWER(job) = lower('MANAGER'); 
+
+SELECT UPPER(ENAME) AS "EMPLOYEE NAME" FROM EMP;
+
+
+5. SRF in where clause
+
+select * from emp
+where job = upper('manager');
+
+=> concat , lower , upper are charecter based SRF
+
+6. initcap() - capitalize the initial letter
+
+select initcap('hello my name is riya') from dual;
+
+
+5. length() - returns the length of the column value of string
+
+select length('hello my name is riya') as Length from dual;
+
+select ename , length(ename) from emp;
+
+select ename , length(ename) from emp
+where length(ename) = 6;
+
+6. sub string function - substr()
+
+select 'hello my name is' as Name, substr('hello my name is',10,6) as Sentence from dual;
+
+7. LPAD - Left padding with any symbol
+
+LPAD('hello' , 10 , '&') = it has 3 arguments in LPAD function
+ 1. actual string , 2. total length of the String afetr padding with the symbol , 3. any symbol including space
+ 
+ 
+8. RPAD - Right padding
+
+select RPAD('hello' , 10 , '@') from dual; 
+
+
+9. LTRIM
+
+select LTRIM('@@@@hello' , '@') from dual;
+
+10. RTRIM
+
+select RTRIM('@@Hello%%%%' , '%') from dual;
+
+11. ROUND
+
+select ROUND(107.0089 ,2) from dual;
+
+select ROUND(107.9) from dual;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+12. trunc(integer value , 3) - here 3 means after decimal it takes 3 digit and truncate rest of the value
+
+select trunc(107.932789123,3) from dual;
+
+select trunc(107.932789123) from dual; // If we don't mention 2nd parameter then it will trucate all values after decimal and give anly whole number.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Date Function :-
+
+1. sysdate
+
+select sysdate from dual;
+
+2. systimestamp
+
+select systimestamp from dual;
+
+3. add_months()
+
+select add_months(sysdate , +100) from dual;
+
+select add_months('11/20/2020' , -3) from dual
+
+4. months_between
+
+select months_between('12/4/2013' , '12/15/2012') from  dual;
+
+5. trunc
+
+select months_between('12/4/2013' , '12/15/2012') from  dual;
+
+
+select trunc(systimestamp , 'MONTH') from dual; =  here current date is 06/22/2020 and trunc(systimestamp , 'MONTH') gives the first day of this month 06/01/2020
+
+select trunc(systimestamp , 'YEAR') from dual; =  here current date is 06/22/2020 and trunc(systimestamp , 'YEAR') gives the first day of this year 01/01/2020.
+
+
+
+============================================================================================================================================================
+
+Conversion Function :-
+
+
+Oracle default date format - month/date/year - mm/dd/yyyy
+
+1. to_char() - convert any date / number representation as String representation
+
+select to_char(sysdate , 'dd-mm-yyyy') from dual;
+
+
+SELECT to_char(sysdate, 'ddth "of" month, yyyy') from dual
+
+select sal , to_char(sal , '$99,999.99') as Salaries from emp;
+
+
+2. to_date()  - convert String into date format
+
+select add_months(to_date('2020-07-30' , 'yyyy-mm-dd') , 2) from dual;
+
+3.
+
+select to_date('24 of June, 2020' , 'dd "of" Month, yyyy') from dual;
+
+SELECT to_date('3 of June, 2012', 'dd "of" Month, YYYY')
+from dual
+
+
+============================================================================================================================================================
+
+NVL Function - replace null value /  empty cell with some value
+
+select ename , sal, nvl(comm , 0)
+from emp where empno in (7839 , 7698, 7782, 7654);
+
+select ename , sal, NVL(to_char(comm) , 'No Data Found') as comm
+from emp where empno in (7839 , 7698, 7782, 7654);
+
+
+============================================================================================================================================================
+
+NULLIF(arg1 , arg2) = if both the arguments are equal then it will return the empty cell.
+
+
+select ename ,length(ename) as Name , nullif(length(ename) , 5) as Length from emp;
+
+select ename , length(ename) as Name , NVL(to_char(nullif(length(ename) ,5)) , 'Name is of length 5') as Length from emp;
+
+
+
+
+============================================================================================================================================================
+Example :-
+
+1. SELECT SUBSTR('2009', 1, 2) || LTRIM('1124', '1') FROM DUAL;
+
+
+select ename , length(ename) , substr(ename , 1 , 3) as first , substr(ename , (length(ename) -3) , 3) as Last from emp;
+
+select ename ,  substr(ename , (length(ename) -2) , 3) as Last from emp;
+
+SELECT MONTHS_BETWEEN(LAST_DAY('15-JAN-12') + 1, '01-APR-12') FROM DUAL;
+
+select last_day('15-JAN-12') from dual;
+
+select months_between(last_day(to_date('15-JAN-12' , 'dd-mon-yy')) + 1 , to_date('01-APR-12' , 'dd-mon-yy')) from dual;
+
+SELECT SUBSTR('2009', 1, 2) || LTRIM('1124', '1') FROM DUAL;
+
+
+
+
+=============================================================================================================================================================
+Aggregation function / Group Function:-
+
+1. select max(sal) from emp where job like upper('manager') ;
+
+2. select avg(sal) as AvgSal from emp;
+
+3. count() - returns the number of data occurence /number of rows in the table
+
+select count(sal) from emp;
+
+select count(*) from emp;
+
+select count(comm) from emp; = returns 4 as it output as comm column contains 4 rows which contains data
+
+4. 
+select sum(sal) / count(*) as sum_count from emp;
+
+
+============================================================================================================================================================
+
+Group by clause and Having clause
+
+
+select min(sal),job from emp
+group by job;
+
+
+select max(sal),job from emp
+group by job;
+
+select count(*),job from emp
+group by job
+having count(*) = 2;  //group function are only work with having clause not in where clasue
+
+**
+select job , deptno , count(*) from emp
+group by job , deptno;
+
+
+===========================================================================================================================================================
+
+*** Sub queries = always inner query will run/execute first.
+
+Example :-
+
+1.
+select *from dept
+where deptno < (select deptno from dept where deptno = 30)
+and dname = UPPER('accounting');
+
+2.
+
+List of employees whose department is located in CHICAGO
+
+select *from emp
+where deptno = (select deptno from dept where loc = 'CHICAGO');
+
+=> In case of sub query , if sub query returns multiple rows then we should use in clause for that case
+
+select * from emp where deptno = (select deptno from dept); //in this case error occured as inner query will return more than one row. That is why = should be replaced with in-clause
+
+
+select * from emp where deptno in (select deptno from dept); //correct
+
+
+*************************************************************************************************************************************************************
+
+Table JOINS
+*************
+
+Example -
+
+1)
+
+select e.ename,e.job,e.sal,d.deptno
+from emp e, dept d
+where e.deptno = d.deptno 
+and d.loc = 'DALLAS';
+
+2)
+select e.ename,e.job,e.sal,d.deptno
+from (select * from emp where job in('MANAGER','CLERK')) e, dept d
+where e.deptno = d.deptno 
+and d.loc = 'DALLAS';
+
+select e.ename,e.job,e.sal,d.deptno
+from (select * from emp where job in('MANAGER','CLERK')) e, (select *from dept where loc='DALLAS') d
+where e.deptno = d.deptno ;
+
+Note = subquery after "from" statement will act as the table of data
+
+3)
+INNER JOIN = return the dataset/records which are common in both the tables
+***********
+
+
+select *from 
+emp e,dept d
+where e.deptno = d.deptno;
+
+select *from 
+emp e INNER JOIN dept d
+ON e.deptno = d.deptno;
+
+select e.* , d.* from 
+emp e INNER JOIN dept d
+ON e.deptno = d.deptno;
+
+
+select e.* , d.* from 
+(select *from emp) e INNER JOIN (select * from dept) d
+ON e.deptno = d.deptno;
+
+4)
+LEFT JOIN /LEFT OUTER JOIN =   return all the data of the LEFT table and the common data of right table.
+***************************    LEFT JOIN/LEFT Outer JOIN are same.
+
+
+select *from
+emp e LEFT JOIN dept d
+ON e.deptno = d.deptno;
+
+
+5)
+RIGHT JOIN/RIGHT OUTER JOIN =    returns all the data of the RIGHT table and the matched/common data of left table
+***************************      RIGHT JOIn/RIGHT OUTER JOIN are same.
+
+select *from
+emp e RIGHT JOIN dept d
+ON e.deptno = d.deptno;
+
+NOTE = 
+LEFT JOIN or RIGHT JOIN are same , it depends on the requirement i.e. which table data we would need all data
+
+6)
+FULL OUTER JOIN = returns all the data from both the tables i.e. including LEFT and RIGHT table
+****************
+
+
+select *from
+emp e FULL OUTER JOIN dept d
+ON e.deptno = d.deptno;
+
+NOTE =
+we can write subquery also, at first subquery is executed then full query will executed
+
+
+select e.* , d.* from 
+(select *from emp) e INNER JOIN (select * from dept) d
+ON e.deptno = d.deptno;
+
+in the above example , at first subqueries (select *from emp) e ,(select * from dept) d are executed then the full sql select statement is executed.
+
+7)
+SELF JOINS
+***********
+
+=>>when we join with the same table
+=>> For example - EMP table contains empno and mgr column , empno column contains empid(i.e. interger value) and mgr column also contains the empid(i.e. Integer value) , mgr column contains the empno of the manger empno
+
+=>> SELF JOIN is used when we want to fetch the ename along with the manager name, where mgr column contains the empno value , in that case we would make use of SELF JOIN on empno , mgr
+
+
+select e.ename "Employee Name",m.ename "Manger Name"
+from emp e, emp m
+where e.mgr = m.empno;
+
+
+8)
+CROSS JOIN / NO JOIN /CARTISAN JOIN
+*************************************
+
+=>> in case of CROSS JOIN/NO JOIN , we need not to write the join columns in the where clause or ON statement
+=>> in case of CROSS JOIN/NO JOIN , all possible combinations of records will be displayed as output
+=>> EX - EMP table has 14 records/rows and DEPT table has 4 records/rows , so, in case of CROSS JOIN/NO JOIN output records will be 56(14*4) 
+
+select *
+from emp,dept;
+
+select *from
+emp CROSS JOIN dept; 
+
+
+9)
+NATURAL JOIN
+**************
+
+=>> NATURAL JOIN is INNER JOIN but with no join cloumn specified
+=>> EMP table has deptno column (Foreign key) and DEPT has deptno column ( Primary key of DEPT table)
+
+select ename,mgr,loc
+from emp NATURAL JOIN dept
+
+Where = ename,mgr column is present in emp table 
+        and loc column present in dept table , NATURAL JOIN means Oracle will join on deptno column , which is the common column name present in both the table as
+        primary key(deptno) in DEPT table and foreign key(deptno) in EMP table
+
+
+10)
+JOIN with USING Clause
+************************
+
+Ex-
+
+select ename,mgr,loc
+from emp JOIN dept USING(deptno);
+
+=>> JOIN is the INNER JOIN
+=>> USING clause will need the column name for joining, here we mention deptno because deptno column name spelling is same in both the table 
+=>> we can use the USING clause with LEFT , RIGHT , FULL OUTER JOIN
+
+Note- If for joining 2 tables primary and forign key column name spelling is different in both the tables , then we should mention the both the column name in the USING clause
+
+EX-
+
+select ename,mgr,loc
+from emp LEFT JOIN dept USING(emp_col_name , dept_col_name);
+
+
+11)
+EQUIJOIN
+**********
+
+==>> EQUI JOIN or INNER JOIN are same
+==>> In case of EQUIJOIN join columns are mentioned in where clause with = operator
+
+select *from 
+emp e,dept d
+where e.deptno = d.deptno;
+
+12)
+NON EQUIJOIN
+**************
+
+select e.ename, e.sal, j.grade_level
+from emp e , job_grade j
+where e.sal between j.lowest_sal and j.highest_sal;
+
+Note-
+=>>> In case of NON-EQUIJOIN, join the table is based on the condition specified not with the join cloumn
+=>>> For emp , job_grade table, they donot have primary key and Foreign key relationship. that is why emp and job_grade table details will be fetched on the basis of the e.sal from emp table and salary in range between lowest and highest from the job_grade table
+
+
+
+*************************************************************************************************************************************************************
+
+CASE STATEMENT
+-----------------
+
+Reference Tutorial = https://www.techonthenet.com/oracle/functions/case.php
+
+Ex-
+
+select ename,job,
+(CASE job
+wHEN 'MANAGER' THEN 'Pays money'
+WHEN 'SALESMAN' THEN 'Sales product'
+WHEN 'PRESIDENT' THEN 'Supervisor'
+WHEN 'CLERK' THEN 'Adimn part'
+WHEN 'ANALYST' THEN 'Analysis'
+ELSE 'No Comment'
+END) as "Job Comment"
+from EMP;
+
+
+*************************************************************************************************************************************************************
+
+CREATE TABLE , INSERT INTO VALUES 
+------------------------------------
+
+EX-
+
+CREATE TABLE stores
+(store_id number NOT NULL,
+city VARCHAR(50)
+);
+
+EX-
+
+INSERT INTO stores(store_id,city) VALUES(1,'Kolkata');
+
+INSERT INTO stores(store_id,city) VALUES(2,'Bangaluru');
+

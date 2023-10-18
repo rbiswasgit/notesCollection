@@ -1,0 +1,17 @@
+
+MDN Reference = https://developer.mozilla.org/en-US/
+**MDN reference for tutorial
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+VARIABLE IN JS
+------------------
+>>for creating a variable in JS , we should use let
+let variable_name = value;
+variable_name = variable_name + 1;
+variable_name *=5;
+
+>>const variable_name = value;
+NOTE = const value can not be changed , it will give error if we wnay to change the const variable value
+
+>>

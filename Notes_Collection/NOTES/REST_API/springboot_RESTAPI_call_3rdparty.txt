@@ -1,0 +1,185 @@
+
+3rd Part REST call
+------------------
+
+1)Free Whether API
+
+https://openweathermap.org
+rbiswas30@gmail.com
+whetherRiya30@
+
+API End Point = 
+
+Endpoint:
+- Please, use the endpoint api.openweathermap.org for your API calls
+- Example of API call:
+api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=6cf5569d72c8385391a92dae3b68d156
+
+API documentation https://openweathermap.org/api
+
+Note :
+Reference -
+https://fullstackdeveloper.guru/2020/10/20/how-to-pass-url-and-query-parameters-in-spring-rest-client/
+
+*************************************************************************************************************************************************************
+
+1)Code: Write an employee model. Try to use SequenceGenerator/UUID for employee id / Code: How to declare a model with UUID as an Id declaration.
+
+steps :-
+---------
+
+i)Create a entity class with the primary key (id) as UUID
+
+	@Entity
+	@Table(name="empdata")
+	public class EmpData {
+	
+		@Id
+		@GeneratedValue(strategy = GenerationType.AUTO)
+		@Column(name="id")
+		private UUID id;
+		
+		@Column(name="name")
+		private String name;
+		
+		@Column(name="email")
+		private String email;
+		
+		@Column(name="address")
+		private String address;
+
+		//default constructor , parameterized constructor
+		//getters + setters
+
+   }
+
+ ii) Design database table coulmn for id (primary key) as datatype BINARY
+
+Table: empdata
+Columns:
+	id binary(16) PK 
+	name varchar(45) 
+	email varchar(45) 
+	address varchar(45)
+
+iii) Display the table data
+
+select BIN_TO_UUID(id) id ,email, name , address
+from empdata;
+
+Note-
+Reference - 
+https://www.mysqltutorial.org/mysql-uuid/
+https://vladmihalcea.com/uuid-identifier-jpa-hibernate/
+
+*************************************************************************************************************************************************************
+
+2) Spring Data JPA - CUSTOM Query - (update query)
+---------------------------------------------------
+
+
+Steps -
+--------
+
+1) Create an entity class
+
+@Entity
+@Table(name="empdata")
+public class EmpData
+{
+	
+	@ID
+	@Column(name = "id")
+	@GeneratedVale(strategy = GenerationType.AUTO)
+	private UUID id;
+
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "address")
+	private String address;
+
+
+	//default constructor parameterized constructor
+	//getters + setters
+}
+
+2) Create a JpaRepository interface
+
+
+public interface EmpDataRepository extends JpaRepository<EmpData,UUID>
+{
+	//return type of the method tells number of records updated
+	@Modifying
+	@Transactional
+	@Query(value = "update empdata set email = ? where name =?" , nativeQuery = true)
+	int updateSetEmailForName(@Param("email") String email , @Param("name") String name);
+}
+
+
+
+3)Create a controller for /update api-end point
+
+@PutMapping("/update")
+	public int updateEmpdataSetEmailForName(@RequestBody EmpData empData)
+	{
+		int updatedCount = empDataRepository.updateEmpDataSetEmailForName(empData.getEmail(), empData.getName());
+		return updatedCount;
+	}
+
+
+NOTE =
+Reference -
+https://www.baeldung.com/spring-data-jpa-query
+https://stackoverflow.com/questions/42966967/creating-a-custom-query-with-spring-data-jpa
+https://github.com/spring-projects/spring-boot/issues/3576
+
+
+***********************************************************************************************************************************************************
+
+3) Spring data JPA - Custom query - CALL STORED PROCEDURE (SP)
+----------------------------------------------------------------
+
+Reference-
+https://www.baeldung.com/spring-data-jpa-stored-procedures
+https://kalpads.medium.com/calling-stored-procedure-using-spring-jpa-ee37fa58ca2d
+
+=>>>> call stored procedure using JPA (SP without IN,OUT,INOUT parameter)
+
+i)Add @Procedure annotation for calling SP
+
+public interface EmpDataRepository extends JpaRepository<EmpData,UUID>{
+
+	//return type of the method tells number of records updated
+	@Modifying
+	@Transactional
+	@Query(value = "update empdata e set e.email = ? where e.name = ?" , nativeQuery = true)
+	int updateEmpDataSetEmailForName(@Param("email") String email, @Param("name") String name);
+		
+	
+	@Procedure(name = "getAllEmpData")
+	List<EmpData> getAllEmpData();
+	
+}
+
+
+ii)Add api end point on Controller
+
+@RestController
+public class EmployeeController {
+	
+	@Autowired
+	private EmpDataRepository empDataRepository;
+	
+	@GetMapping("/allEmpdata")
+	@Transactional
+	public List<EmpData> findAllEmpData(){
+		return empDataRepository.getAllEmpData();
+	}
+}
+ 
+
+=>>>> calling SP with multiple IN ,OUT parameters using JPA

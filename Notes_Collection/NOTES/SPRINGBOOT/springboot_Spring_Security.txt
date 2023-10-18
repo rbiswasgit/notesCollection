@@ -1,0 +1,779 @@
+ SPRING SECURITY
+******************
+
+=>> springboot spring security provides the Authorization and authentication and session management.
+
+=>> Authentication = means who are you? meaning required credential(username and password)
+=>> Authorization = means who has which access according to the Roles
+
+=>> *** single springboot security dependency will provide all the features like Authorization,Authentication and session management
+
+
+Maven Dependency
+------------------
+
+1) tomcat jasper dependency (convert .jsp file into servlet)
+
+<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jasper -->
+	<dependency>
+	    <groupId>org.apache.tomcat</groupId>
+	    <artifactId>tomcat-jasper</artifactId>
+	    <version>9.0.73</version>
+	</dependency>
+
+
+2)spring security dependency
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+
+**** Note =
+->>> springboot does not allow .jsp file , rather we need to add tomcat jasper dependency, in order to convert .jsp file to servlet file
+
+
+**************************************************************************************************************************************************************
+
+SPRING SECURITY - ADD MYSQL DB - USER DEFINED /login or /logout page - BCrypt PASSWORD ENCODER
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+*************************************************************************************************************************************************************
+
+SPRINGBOOT + SPRING SECURITY
+------------------------------
+
+1)CREATE A SPRINGBOOT PROJECT - Spring Initializer
+
+add dependency -> spring-starter-web , spring-starter-security
+
+2)Create a Cotroller class and add api-end point to it
+
+@RestController
+@RequestMapping("/api/security/v1")
+public class HomeController {
+
+    @GetMapping("/hello-world")
+    public String getHelloworld(){
+        return "Hello World!!!!!";
+    }
+}
+
+3)
+hit the api-end-point on browser/postman
+
+http://localhost:8080/api/security/v1/hello-world
+
+>>>by default spring-security provides the default username and password
+Default credential
+user
+evey time when we run the application, password is generated on the console
+
+>>we can override the default spring-security credential, by updating the application.properties file
+File - application.properties
+
+spring.security.user.name=foo
+spring.security.user.password=foo
+
+
+
+
+NOTE :-
+Spring-starter-security by default provides few features
+>> Adds mandatory authentication for URLS
+>> Adds login form
+>> Handles Login error
+>> Creates a User and provide default password
+
+
+
+SPRIGBOOT + SPRING-SECURITY - Configure Spring Security Authentication Configuration (IN-MEMORY) (AUTHENTICATION)
+-------------------------------------------------------------------------------------------------------------------
+
+1)Create a springboot+spring security project with dependency (spring-web and spring-starter-dependency)
+2)No need to override default username and password (default credential)[ no need to update application.properties file]
+
+3)Create a Spring Security configuration file
+>>> for Authentication , extend class WebSecurityConfigurerAdapter and override method configure(AuthenticationManagerBuilder auth)
+																								------------------------------------
+package com.springboot.security.demoSpringSecurityV2.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@EnableWebSecurity
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("foo1")
+                .password("foo1")
+                .roles("USER")
+                .and()
+                .withUser("foo2")
+                .password("foo2")
+                .roles("ADMIN");
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+
+}
+
+
+SPRINGBOOT + SPRING SECURITY - Configure Spring Security Authorization Configuration (IN-MEMORY) (AUTHORIZATION)
+------------------------------------------------------------------------------------------------------------------
+
+1)Create a springboot+spring security project with dependency (spring-web and spring-starter-dependency)
+2)No need to override default username and password (default credential)[ no need to update application.properties file]
+
+3)Create a Spring Security configuration file
+>>> for AUTHORIZATION , extend class WebSecurityConfigurerAdapter and override method configure(HttpSecurity http)
+																					  ------------------------------
+
+package com.springboot.security.demoSpringSecurityV2.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@EnableWebSecurity
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("foo1")
+                .password("foo1")
+                .roles("USER")
+                .and()
+                .withUser("foo2")
+                .password("foo2")
+                .roles("ADMIN");
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/security/v1/admin").hasRole("ADMIN")
+                .antMatchers("/api/security/v1/user").hasAnyRole("USER","ADMIN")
+                .antMatchers("/api/security/v1/hello-world").permitAll()
+                .and()
+                .formLogin();
+    }
+}
+
+
+***********************************************************************************************************************************************************
+
+SPRING BOOT + SPRING SECURITY (JDBC Authentication with Spring Security)
+--------------------------------------------------------------------------
+
+1)Create a Springboot project from the Spring Initializer
+(add dependency -> spring web , Spring Security , H2 Database , JDBC API) 
+
+2)
+
+OPTION 1 :-
+------------
+(Using DEFAULT SCHEMA - Spring Security default schema and H2 database)
+
+=>>>> In this example , we are using H2 database for the user details/informations
+=>>>> We will be using deafult schema for the spring security
+=>>>> we are using DB as H2 Database , 
+@Autowired
+DataSource dataSource; //spring security autometically connect configured DB by default
+
+***** Create a Java class for spring security configuration
+File - SpringSecurityConfiguration.class
+------------------------------------------
+
+package com.springboot.security.springsecurityJDBC.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
+
+@EnableWebSecurity
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    DataSource dataSource; //spring security autometically take the required datasource/database from the class path- in this case H2 DB
+
+    //Authentication
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .withDefaultSchema()
+                .withUser(
+                        User.withUsername("user")
+                                .password("123")
+                                .roles("USER")
+                )
+                .withUser(
+                        User.withUsername("admin")
+                                .password("123")
+                                .roles("ADMIN")
+                );
+    }
+
+    //Authorization
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/v1/admin").hasRole("ADMIN")
+                .antMatchers("/api/v1/user").hasAnyRole("USER","Admin")
+                .antMatchers("/api/v1/home").permitAll()
+                .and()
+                .formLogin();
+
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
+    }
+}
+
+
+OPTION 2 :-
+--------------
+(USING APPLICATION SPECIFIC  SCHEMA - Springboot security application specific schema for login credential)
+
+=>> In this example we are using DB - H2 database and schema as application scecfic means 
+schema.sql (create a required table for storing credentials) and data.sql(insert data into DB table) , loc toi create those 2 file (src/main/resources)
+
+schema details (Spring security standard schema) =>>  
+https://docs.spring.io/spring-security/reference/servlet/appendix/database-schema.html#_user_schema
+
+1) create pre existing user records :-
+
+loc - src/main/resources
+File - schema.sql (create table)
+File - data.sql (insert data into table)
+
+take the schema details from the spring doc ->> https://docs.spring.io/spring-security/reference/servlet/appendix/database-schema.html#_user_schema
+
+=>>>> Schema.sql and data.sql file need to be created in order to create table in the H2 table(using Schema.sql file) and insert data into the table using 
+(data.sql file) , every run the application both the Schema.sql and data.sql file will be executed and H2 database will be populated
+
+File :- schema.sql (loc- src/main/resources)
+-----------------------------------------------
+
+create table users(
+    username varchar_ignorecase(50) not null primary key,
+    password varchar_ignorecase(50) not null,
+    enabled boolean not null
+);
+
+create table authorities (
+    username varchar_ignorecase(50) not null,
+    authority varchar_ignorecase(50) not null,
+    constraint fk_authorities_users foreign key(username) references users(username)
+);
+create unique index ix_auth_username on authorities (username,authority);
+
+
+File :- data.sql (loc- src/main/resources)
+--------------------------------------------
+
+INSERT INTO users(username,password,enabled)
+VALUES('user','pass',true);
+INSERT INTO users(username,password,enabled)
+VALUES('admin','pass',true);
+
+INSERT INTO authorities(username,authority)
+values('user','ROLE_USER');
+INSERT INTO authorities(username,authority)
+values('admin','ROLE_ADMIN');
+
+
+2)Create springsecurity configuration file
+
+
+package com.springboot.security.springsecurityJDBC.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
+
+@EnableWebSecurity
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    DataSource dataSource; //spring security autometically take the required datasource/database from the class path
+
+    //Authentication
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //login credential details for the different users are stored already like table details
+       auth.jdbcAuthentication()
+               .dataSource(dataSource);
+    }
+
+    //Authorization
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/v1/admin").hasRole("ADMIN")
+                .antMatchers("/api/v1/user").hasAnyRole("USER","Admin")
+                .antMatchers("/api/v1/home").permitAll()
+                .and()
+                .formLogin();
+
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
+    }
+}
+
+
+*************************************************************************************************************************************************************
+
+SPRINGBOOT + SPRING SECURITY - AUTHENTICATION WITH JPA AND MYSQL
+------------------------------------------------------------------
+
+1)Create Springboot project from the spring initializer
+(add dependency >>> spring-web , spring-data-jpa , spring-security , mysql-driver)
+
+
+2)Create a schema(DB) and tables for User on the MySql workbench
+
+Table >>
+CREATE TABLE `spring-security-db`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NULL,
+  `roles` VARCHAR(45) NULL,
+  `active` TINYINT NULL,
+  PRIMARY KEY (`id`));
+
+Insert Data into DB table>>
+insert into `spring-security-db`.user(id,username,password,roles,active)
+values(1,'user','pass','ROLES_USER',1);
+insert into `spring-security-db`.user(id,username,password,roles,active)
+values(2,'admin','pass','ROLES_ADMIN',1);
+
+
+
+3)Update application.properties file for the DB Details
+
+File- application.properties
+-----------------------------
+#
+#
+# JDBC properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/spring-security-db?useSSL=false&serverTimezone=UTC
+spring.datasource.username=riyalogin
+spring.datasource.password=123456
+
+
+
+
+4)
+OPTION 1 - WITHOUT JPA (Hardcorded user credential using UserDetailsService)
+------------------------------------------------------------------------------
+
+>> create a spring security configuration file
+>> create a class that implements the UserDetailsService interface
+>> create a class that implemnts the UserDetails interface and UserDetailsService interface returns the UserDetails  object
+
+File- SpringSecurityConfiguration.java
+---------------------------------------
+
+package com.springboot.springsecurityjpamysql.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@EnableWebSecurity
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    //Authentication - without JPA - create a new class which implements the UserDetailsService interface
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService);
+    }
+
+    //Authorization
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/v1/admin").hasRole("ROLES_ADMIN")
+                .antMatchers("/api/v1/user").hasAnyRole("ROLES_USER","ROLE_ADMIN")
+                .antMatchers("/api/v1/home").permitAll()
+                .and()
+                .formLogin();
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncode()
+    {
+        return NoOpPasswordEncoder.getInstance();
+    }
+}
+
+
+File - MyUserDetailsService.java
+-----------------------------------
+
+package com.springboot.springsecurityjpamysql.securityWithOutJPA;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MyUserDetailsService implements UserDetailsService {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+         return new MyUserDetails(username);
+    }
+}
+
+
+File - MyUserDetails.java
+---------------------------
+
+package com.springboot.springsecurityjpamysql.securityWithOutJPA;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+public class MyUserDetails implements UserDetails {
+
+    private String username;
+
+    public MyUserDetails(String username)
+    {
+     this.username = username;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority("ROLES_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return "pass";
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
+
+
+File - HomeController.java
+------------------------------------
+
+package com.springboot.springsecurityjpamysql.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1")
+public class HomeResource {
+
+    @GetMapping("/home")
+    public String home(){
+        return "Welcome Home!!!!";
+    }
+
+    @GetMapping("/user")
+    public String sayUser(){
+        return "Welcome User!!!!!";
+    }
+
+    @GetMapping("/admin")
+    public String sayAdmin(){
+        return "Welcome Admin!!!!";
+    }
+}
+
+
+
+
+OPTION 2 - WITH JPA - READ THE USER CREDENTIALS FROM THE DATABASE
+----------------------------------------------------------------------
+
+>>Spring security configuration will be same like hardcode without JPA configuration
+>>create an entity class
+>>create a repository interface which extens the JPARepository<User,Integer>
+>>there will be changes in the MyUserDetailsService.java and MyUserDetails.java class
+
+File - User.java
+-------------------
+
+@Entity
+@Table(name = "user")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    private String userName;
+    private String password;
+    private String roles;
+    private boolean active;
+
+    //paarmeterized construtor
+    //default constrcuctor
+    //getters and setters
+
+}
+
+File - UserRepository.java
+----------------------------
+
+package com.springboot.springsecurityjpamysql.repository;
+
+import com.springboot.springsecurityjpamysql.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User,Integer> {
+    Optional<User> findByUserName(String username);
+
+}
+
+
+File - UserDetailsServiceJpa.java
+----------------------------------
+
+package com.springboot.springsecurityjpamysql.securityWithJPA;
+
+import com.springboot.springsecurityjpamysql.entity.User;
+import com.springboot.springsecurityjpamysql.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class MyUserDetailsServiceJpa implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByUserName(userName);
+       //here at first user details or credentials are fetced from DB using JpaRepository and return value is in User type
+        // but loadUserByUsername() method will return type is UserDetails type
+        //that is why we need to conert the User object to UserDetails type object
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + userName));
+
+        return user.map(MyUserDetailsJpa::new).get();
+    }
+}
+
+
+File - UserDetailsJpa.java
+---------------------------
+
+package com.springboot.springsecurityjpamysql.securityWithJPA;
+
+import com.springboot.springsecurityjpamysql.entity.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class MyUserDetailsJpa implements UserDetails {
+
+    private String userName;
+    private String password;
+    private boolean active;
+    private List<GrantedAuthority> authorities;
+
+    public MyUserDetailsJpa(User user){
+        this.userName = user.getUserName();
+        this.password = user.getPassword();
+        this.active = user.isActive();
+        this.authorities = Arrays.stream(user.getRoles().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
+}
+
+
+File- SpringSecurityconfiguration.java
+-----------------------------------------
+
+package com.springboot.springsecurityjpamysql.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@EnableWebSecurity
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    @Qualifier("MyUserDetailsServiceJpa")
+    UserDetailsService userDetailsService;
+
+    //Authentication - without JPA - create a new class which implements the UserDetailsService interface
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService);
+    }
+
+    //Authorization
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/v1/admin").hasRole("ROLES_ADMIN")
+                .antMatchers("/api/v1/user").hasAnyRole("ROLES_USER","ROLE_ADMIN")
+                .antMatchers("/api/v1/home").permitAll()
+                .and()
+                .formLogin();
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncode()
+    {
+        return NoOpPasswordEncoder.getInstance();
+    }
+}
+
+
+*************************************************************************************************************************************************************
+*************************************************************************************************************************************************************
+
+
+
+
+

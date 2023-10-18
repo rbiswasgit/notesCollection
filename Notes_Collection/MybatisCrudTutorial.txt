@@ -1,0 +1,491 @@
+
+1) 
+MyBatisDao.java
+-------------------------
+
+import java.io.IOException;
+import java.io.Reader;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+public class mybatisInsert { 
+
+   public static void main(String args[]) throws IOException{
+      
+   /* Common Code
+      Reader reader = Resources.getResourceAsReader("SqlMapConfig.xml");
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);		
+      SqlSession session = sqlSessionFactory.openSession();
+      
+   */
+      //Create a new student object
+      Student student = new Student("Mohammad","It", 80, 984803322, "Mohammad@gmail.com" ); 
+            
+      //------Insert student data   
+   
+           session.insert("Student.insert", student);
+           System.out.println("record inserted successfully");
+           session.commit();
+           session.close();
+
+      ---------//	
+
+      //------Read Operation--------
+            
+           i)//select a particular student  by  id
+           int i=1;	
+           Student student = (Student) session.selectOne("Student.getById", 2); 
+	  
+          //Print the student details
+          System.out.println(student.getId());
+          System.out.println(student.getName());
+          System.out.println(student.getBranch());
+          System.out.println(student.getPercentage());      
+          System.out.println(student.getEmail());      
+          System.out.println(student.getPhone());
+		
+          session.commit();
+          session.close(); 
+ 
+          end of read by ID//
+
+         ii)  //select contact all contacts		
+      List<Student> student = session.selectList("Student.getAll");
+          
+      for(Student st : student ){    	  
+         System.out.println(st.getId());
+         System.out.println(st.getName());
+         System.out.println(st.getBranch());
+         System.out.println(st.getPercentage());         
+         System.out.println(st.getEmail());        
+         System.out.println(st.getPhone());   
+      }  
+		
+      System.out.println("Records Read Successfully ");          
+      session.commit();   
+      session.close();
+
+
+     ----------//
+
+     //---------------Update Operation-------------
+
+        //select a particular student using id		
+           Student student = (Student) session.selectOne("Student.getById", 1);
+           System.out.println("Current details of the student are" );
+           System.out.println(student.toString());  
+      
+      //Set new values to the mail and phone number of the student
+          student.setEmail("mohamad123@yahoo.com");
+          student.setPhone(90000000);
+      
+      //Update the student record
+         session.update("Student.update",student);
+         System.out.println("Record updated successfully");   
+         session.commit();   
+         session.close();	  
+	  
+      //verifying the record 
+         Student std = (Student) session.selectOne("Student.getById", 1);
+         System.out.println("Details of the student after update operation" );
+         System.out.println(std.toString());   
+         session.commit();   
+        session.close();
+
+    ----------//
+
+    //-----------------Delete Operation-----------
+
+         
+      //Delete operation
+      session.delete("Student.deleteById", 2);     
+      session.commit();
+      session.close();      
+      System.out.println("Record deleted successfully");
+
+   ------------------// 
+		
+   }
+   
+}
+
+
+2) Annotation
+---------------------------
+
+=> Mapper XML file = to store mapped SQL statements 
+ configuration XML file = to configure MyBatis.
+
+=> While working with annotations, 
+   instead of configuration XML file,
+   we can use a java mapper interface to map and execute SQL queries
+
+step by step Approach :
+
+step 1 :-
+create a POJO class.
+
+step 2:-
+
+Mapper Java class = where they perform CRUD operation i.e. CRUD operaton queries.
+
+Student_mapper.java
+...................
+
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.*;
+
+public interface Student_mapper {
+	
+   final String getAll = "SELECT * FROM STUDENT"; 
+   final String getById = "SELECT * FROM STUDENT WHERE ID = #{id}";
+   final String deleteById = "DELETE from STUDENT WHERE ID = #{id}";
+   final String insert = "INSERT INTO STUDENT (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email})";
+   final String update = "UPDATE STUDENT SET EMAIL = #{email}, NAME = #{name}, BRANCH = #{branch}, PERCENTAGE = #{percentage}, PHONE = #{phone} WHERE ID = #{id}";
+   
+   @Select(getAll)
+   @Results(value = {
+      @Result(property = "id", column = "ID"),
+      @Result(property = "name", column = "NAME"),
+      @Result(property = "branch", column = "BRANCH"),
+      @Result(property = "percentage", column = "PERCENTAGE"),       
+      @Result(property = "phone", column = "PHONE"),
+      @Result(property = "email", column = "EMAIL")
+   })
+   
+   List getAll();
+  
+   @Select(getById)
+   @Results(value = {
+      @Result(property = "id", column = "ID"),
+      @Result(property = "name", column = "NAME"),
+      @Result(property = "branch", column = "BRANCH"),
+      @Result(property = "percentage", column = "PERCENTAGE"),       
+      @Result(property = "phone", column = "PHONE"),
+      @Result(property = "email", column = "EMAIL")
+   })
+   
+   Student getById(int id);
+
+   @Update(update)
+   void update(Student student);
+
+   @Delete(deleteById)
+   void delete(int id);
+  
+   @Insert(insert)
+   @Options(useGeneratedKeys = true, keyProperty = "id")
+   void insert(Student student);
+}
+
+
+step 3:-
+
+
+import java.io.IOException;
+import java.io.Reader;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+public class Annotations_Example { 
+
+   public static void main(String args[]) throws IOException{
+      
+      Reader reader = Resources.getResourceAsReader("SqlMapConfig.xml");
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);		
+      SqlSession session = sqlSessionFactory.openSession();
+      session.getConfiguration().addMapper(Student_mapper.class);
+      
+      Student_mapper mapper = session.getMapper(Student_mapper.class);      
+       
+  //---------------Save Record------------------------------------//
+      //Create a new student object
+      Student student = new Student();
+      
+      //Set the values      
+      student.setName("zara");
+      student.setBranch("EEE");
+      student.setEmail("zara@gmail.com");
+      student.setPercentage(90));
+      student.setPhone(123412341);
+            
+      //Insert student data   
+      mapper.insert(student);
+      System.out.println("record inserted successfully");
+      session.commit();
+      session.close();
+			
+   }
+
+
+ //-------------Update Record-------------------------------//
+  //select a particular student using id		
+   Student student = mapper.getById(2);
+   System.out.println("Current details of the student are "+student.toString());  
+      
+   //Set new values to the mail and phone number of the student
+   student.setEmail("Shyam123@yahoo.com");
+   student.setPhone(984802233);
+      
+   //Update the student record
+   mapper.update(student);
+   System.out.println("Record updated successfully");   
+   session.commit();   
+   session.close();
+
+ //---------------Read Operation-------------------//
+   
+      //Get the student details
+   Student student = mapper.getById(2);
+   System.out.println(student.getBranch());
+   System.out.println(student.getEmail());
+   System.out.println(student.getId());
+   System.out.println(student.getName());
+   System.out.println(student.getPercentage());
+   System.out.println(student.getPhone());      
+   session.commit();
+   session.close();
+			
+}
+
+//---------------------Delete Operation----------------
+
+  mapper.delete(2);
+   System.out.println("record deleted successfully");
+   session.commit();
+   session.close(); 
+
+
+
+   
+}
+
+
+3) MyBatis - Stored Procedure
+
+step - 1:-
+
+POJO Class
+
+step 2:-
+XML Config file
+
+=> To map the results of the procedures, we have created a resultmap named 
+Student and 
+to call the stored procedure named read_recordById.
+
+student.xml
+-------------
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace = "Student">	
+		
+   <resultMap id = "result" type = "Student">
+      <result property = "id" column = "ID"/>
+      <result property = "name" column = "NAME"/>
+      <result property = "branch" column = "BRANCH"/>
+      <result property = "percentage" column = "PERCENTAGE"/>
+      <result property = "phone" column = "PHONE"/>
+      <result property = "email" column = "EMAIL"/>
+   </resultMap>   
+   
+   <select id = "callById" resultMap = "result" parameterType = "Student" statementType = "CALLABLE">
+      {call read_record_byid(#{id, jdbcType = INTEGER, mode = IN})}
+   </select>   
+    	
+</mapper>
+
+step 3 :-
+myBatisSP.java
+
+import java.io.IOException;
+import java.io.Reader;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+public class getRecords { 
+
+   public static void main(String args[]) throws IOException{
+      
+      Reader reader = Resources.getResourceAsReader("SqlMapConfig.xml");
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);		
+      SqlSession session = sqlSessionFactory.openSession();
+      
+      //select a particular student  by  id	
+      Student student = (Student) session.selectOne("Student.callById", 3);
+      
+      //Print the student details
+      System.out.println("Details of the student are:: ");
+      System.out.println("Id :"+student.getId());
+      System.out.println("Name :"+student.getName());
+      System.out.println("Branch :"+student.getBranch());
+      System.out.println("Percentage :"+student.getPercentage());      
+      System.out.println("Email :"+student.getEmail());      
+      System.out.println("Phone :"+student.getPhone());
+      session.commit();
+      session.close();
+			
+   }
+   
+}
+
+
+4) Dynamic Sql
+-> It enables programmers to build queries based on the scenario dynamically.
+
+i) If Statement
+
+ex1-
+<select id = "getRecByName" parameterType = "Student" resultType = "Student">
+
+   SELECT * FROM STUDENT		 
+   <if test = "name != null">
+      WHERE name LIKE #{name}
+   </if> 
+</select>
+
+ex2-
+<select id = "getRecByName_Id" parameterType = "Student" resultType = "Student">
+
+   SELECT * FROM STUDENT		 
+   <if test = "name != null">
+      WHERE name LIKE #{name}
+   </if>
+
+   <if test = "id != null">
+      AND id LIKE #{id}
+   </if> 
+</select>
+
+-> MyBatis offers a choose element, which is similar to Java's switch statement. 
+It helps to choose only one case among many options.
+
+ii) where Statement
+
+<select id = "getName_Id_phone" parameterType = "Student" resultType = "Student">
+   SELECT * FROM STUDENT
+	
+   <where>
+      <if test = "id != null">
+         id = #{id}
+      </if>
+
+      <if test = "name != null">
+         AND name LIKE #{name}
+      </if>
+   </where>
+		
+</select>
+
+The where element inserts a WHERE only when the containing tags return any content
+
+iii) The foreach Statement
+
+<select id = "selectPostIn" resultType = "domain.blog.Post">
+   SELECT *
+   FROM POST P
+   WHERE ID in
+	
+   <foreach item = "item" index = "index" collection = "list"
+      open = "(" separator = "," close = ")">
+      #{item}
+   </foreach>
+	
+</select>
+
+
+=> step by step process
+step 1:-
+POJO Class
+
+step2:-
+configuration file
+
+Student.xml File
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+&l;t!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace = "Student">	
+
+   <resultMap id = "result" type = "Student">
+      <result property = "id" column = "ID"/>
+      <result property = "name" column = "NAME"/>
+      <result property = "branch" column = "BRANCH"/>
+      <result property = "percentage" column = "PERCENTAGE"/>
+      <result property = "phone" column = "PHONE"/>
+      <result property = "email" column = "EMAIL"/>
+   </resultMap>	     
+
+   <select id = "getRecByName" parameterType = "Student" resultType = "Student">
+      SELECT * FROM STUDENT		 
+		
+      <if test = "name != null">
+         WHERE name LIKE #{name}
+      </if>
+		
+   </select>
+	
+</mapper>
+
+step 3:-
+GetRecordByName.java File
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.List;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+public class GetRecordByName { 
+
+   public static void main(String args[]) throws IOException{
+	   
+      String req_name = "Mohammad";
+      Reader reader = Resources.getResourceAsReader("SqlMapConfig.xml");
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);		
+      SqlSession session = sqlSessionFactory.openSession();
+      Student stud = new Student();
+      stud.setName(req_name);
+      
+      //select contact all contacts		
+      //List<Student> student = session.selectList("getRecByName",stud);
+      
+      stud.setId(1);
+      List<Student> student = session.selectList("getRecByName_Id",stud);
+          
+      for(Student st : student ){    	  
+    	   	  
+         System.out.println("++++++++++++++details of the student named Mohammad are "+"+++++++++++++++++++" );
+    	  
+         System.out.println("Id :  "+st.getId());
+         System.out.println("Name :  "+st.getName());
+         System.out.println("Branch :  "+st.getBranch());
+         System.out.println("Percentage :  "+st.getPercentage());         
+         System.out.println("Email :  "+st.getEmail());        
+         System.out.println("Phone :  "+st.getPhone());    	  
+    	 
+      }     
+      
+      System.out.println("Records Read Successfully ");          
+      session.commit();   
+      session.close();			
+   }
+}

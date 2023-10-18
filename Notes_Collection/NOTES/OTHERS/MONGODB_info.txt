@@ -1,0 +1,237 @@
+MONGODB
+***************
+
+MongoDB docs =  https://www.mongodb.com/docs/manual/tutorial/getting-started/
+
+
+
+
+
+*************************************************************************************************************************************************************
+
+
+Installation :-
+-------------------
+
+https://www.mongodb.com/try/download/community
+
+->> for windows, download the .msi file and install the Mongodb as the service
+
+->> After installing the MongoDb, where MongoDb will act as the background service, which is running at the background
+
+windows > search > services > MongoDB > start/stop
+
+->>> After installing the MongoDB server we will need a Shell which will interact with the MongoDB server in order to create table/Collection and perform data manupulation /data quering operation
+
+->>> Shell will need for writing MongoDB queries. Shell is like a command promt which is needed for writing the MongoDB queries
+
+=>>>In order to access shell , go to C:\Program Files\MongoDB\Server\4.2\bin open mongo.exe file(double click on it) , MongoDB shell will be come up
+
+First commnd on Mongo Shell
+-----------------------------
+C:\Program Files\MongoDB\Server\4.2\bin >> mongo.exe
+
+>show dbs
+
+MONGODB Shell (mongosh)
+------------------------
+=>> MongoDB shell is autometically downloaded with MongoDB server (when we install the MongoDB)
+=>> In oredr to get the latest MongoDB Shell(Mongosh), we need to download separetly.
+
+Google -> search MongoDb shell -> download the shell mongosh
+
+https://www.mongodb.com/try/download/shell
+
+Run :-
+
+windows -> search -> mongosh -> Please enter a MongoDB connection string (Default: mongodb://localhost/): -> enter -> Mongosh shell will be connected to the local installed MongoDB server
+
+
+Note = MongoDB shell is required for writing mongodb query/scripts
+
+*************************************************************************************************************************************************************
+
+COMMANDS / QUERY
+******************
+
+Step1 :- Open mongoDB shell/mongosh shell
+
+windows -> seach -> mongosh -> Please enter a MongoDB connection string (Default: mongodb://localhost/): -> enter
+
+Steps 2 :- write query on shell
+
+use demoDB  (use command will craete a new database if that perticular DB is not present or it will switched to that esisting DB)
+
+
+Enterprise shop> use shop  //(use command will craete a DB or else swich to the existing DB)
+already on db shop
+Enterprise shop> db.products.insertOne({name : "A Book" , price: 15.99})  //(db means to the pointing DB in that case shop, products is the collection/table of the shop DB)
+{
+  acknowledged: true,
+  insertedId: ObjectId("646a364b87c4384f8fc7e866")
+}
+Enterprise shop> db.products.find() //(find() method will display out the list of records of the collection products)
+[
+  {
+    _id: ObjectId("646a364b87c4384f8fc7e866"),
+    name: 'A Book',
+    price: 15.99
+  }
+]
+
+Example-
+db.products.insertOne({name: "Pen", price:10.22 , description: "cello pen"})
+db.products.find().pretty()
+db.products.insertOne({
+...     name:"Computer",
+...     price:220.50,
+...     description:"Hight profile computer",
+...     details:{
+...        cpu : "inter i7",
+...        memory: 32
+...     }
+... })
+db.products.find().pretty()
+
+
+*************************************************************************************************************************************************************
+
+Driver = Driver are require to connect the backend application with the MongoDB server
+
+Refer for Driver =  https://www.mongodb.com/docs/drivers/
+
+*************************************************************************************************************************************************************
+
+1) Remove DB /Collection
+
+use databasename
+db.dropDatabase()
+
+db.myCollectionName.drop()
+
+show dbs
+db.dropDatabase()
+
+show collections (show list of collections)
+
+
+***********************************************************************************************************************************************************
+
+=>>MongoDB is schema less , means datstructure of every row is not same.
+
+**********************************************************************************************************************************************************
+
+CREATE DATA - INSERT COMMANDS
+------------------------------
+
+windows > search > mongosh > enter
+
+show dbs
+use contactData
+db.persons.insertOne({name : "Riya Biswas", age: 29 , hobbies:["sports","cooking"]})
+db.persons.insertOne({name : "Rimy Biswas", age: 5, hobbies:["art","painting","drancing"]})
+db.persons.find().pretty()
+db.persons.insertMany([{name : "Max" ,age:30 , hobbies:["sports","cooking"]},{name : "Manual",age:29,hobbies:["sports","cars"]}])
+db.persons.find().pretty()
+db.hobbies.insertMany([{ _id:"yoga",name:"Yoga"},{_id:"cars",name:"cars"},{_id:"tracking",name:"tracking"}], {ordered:false}) 
+db.hobbies.find().pretty()
+
+Note -
+**ordered":false means , even there is any duplicate entry for id, rest of the non-conflict or non-duplicate data can be added on collection
+
+Import .json documents on DB
+------------------------------
+
+CMD > go to the folder location where you have stored the json file which need to be imported
+
+mongoimport tv-shows.json -d movieData -c movies --jsonArray --drop
+
+
+READ DATA - FETCH COMMANDS
+-----------------------------
+
+show dbs
+use movieData
+show collections
+db.movies.findOne()
+db.movies.find().pretty()
+db.movies.find({}).pretty()
+db.movies.find({runtime:60}).pretty()
+
+
+
+********************************************************************************************************************************************************
+
+COMPARATOR OPERATOR
+---------------------------------------------------------------------------------------
+$ne (not equal)
+ db.movies.find({runtime: {$ne: 60}}).pretty()
+
+$lt (lower than)
+db.movies.find({runtime: {$lt:40}}).pretty()
+
+$gt (greater than)
+ db.movies.find({runtime : {$gt:50}}).pretty()
+
+
+QUERING EMBEDED FIELDS AND ARRAYS
+----------------------------------------------------------------------------------------
+
+use movieData
+show collections
+db.movies.findOne()
+db.movies.find({ "rating.average": {$gt: 7.0} }).pretty()
+
+//quering on Arrays
+db.movies.find({ genres: "Drama"}).pretty()  //return records those have Drama
+
+db.movies.find({ genres: ["Drama"]}).pretty()
+
+
+Operator $in , $nin
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+use movieData
+show collections
+db.movies.find( {runtime: {$in: [30,42]}}).pretty()
+
+db.movies.find( {runtime: {$nin: [40,68]}}).pretty()
+
+
+Operator $or , $nor
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+use movieData
+show collections
+
+Enterprise movieData> db.movies.find({ "rating.average": {$lt : 5}}).count()
+2
+Enterprise movieData> db.movies.find({ "rating.average" : {$gt : 9.3}}).count()
+2
+
+Enterprise movieData> db.movies.find({ $or: [{"rating.average": {$lt:5}} , {"rating.average": {$gt: 9.3}} ]}).count()
+4
+Enterprise movieData> db.movies.find({ $or : [ {"rating.average" : {$lt:5}}, {"rating.average": {$gt: 9.3}} ]}).pretty()
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Operator $and
+------------------
+
+Enterprise movieData> db.movies.find({$and : [{"rating.average": {$gt:9}}, {"genres": "Drama"} ] }).count()
+3
+Enterprise movieData> db.movies.find({"rating.average": {$gt:9}, "genres":"Drama" }).count()
+3
+
+
+Operator $ne , $not
+----------------------
+
+Enterprise movieData> db.movies.find({ "runtime": {$not : {$eq : 60}}  }).count()
+70
+Enterprise movieData> db.movies.find({ "runtime": {$ne : 60}  } ).count()
+70
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------

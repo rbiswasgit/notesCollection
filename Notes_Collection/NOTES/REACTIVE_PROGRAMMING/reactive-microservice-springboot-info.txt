@@ -1,0 +1,262 @@
+REACTIVE MICROSERVICE WITH SPRINGBOOT
+****************************************** 
+
+why reactive programming?
+--------------------------
+
+(10-15 years ago appliaction)
+
+>>10-15 years ago application are build as Monolith application,
+>>deployed in application server which is very cost effective
+>>that architecture does not embrace distributed system
+
+(current application)
+>> current application are microservice based,[ one total software is divided into multiple smaller services called microservice]
+>>currently the appliactions are deployed in cloud enviorenment
+>>embrace distributed system
+
+==>>>>
+>>springMVC/springboot application are not going to meet the present application need
+
+RESTFULL API using SpringMVC/Springboot - FLOW DIAGRAM
+--------------------------------------------------------
+
+=>>> in case of SpringMVC/SpringBoot appliaction , every request is thread per request model
+
+=>>> request is triggered by the client(i.e. Postman/website/client)
+=>>> request goes to the embeded tomcat of the application (Dispacter Servlet is present inside embeded tomcat) ,
+Dispatcher Servlet inside the embeded tomcat is responsible to divert the request to the Controller(respective controller) then controller will send the control to the Service layer and then DAO layer , this is called as Thread per Request Model
+																   ---------------------------
+
+=>>> Thread per request model is not good for the current application model
+=>>> when in SpringMVC/SpringBoot application, when there will be the external api call as well as DB call
+Dispather serverlet will divert the call to the Service layer and then DAO layer or control divert from the Service layer to the External API call layer
+So, in that case , for each call Response will be sent back to the Client and then the other call will trigger, means
+Each Thead will take each Dispacher Servlet request
+[In this case Dispatcher Servlet wll have multiple calls , i.e. one for DAO layer , one for External API layer etc], this kind of call is called as Blocking API.
+
+
+
+
+**************************************************************************************************************************************************************
+
+REACTIVE PROGRAMMING
+------------------------
+
+
+*** What is asynchronous vs synchronous?
+Explained: Asynchronous vs. Synchronous Programming
+Asynchronous is a non-blocking architecture, so the execution of one task isn't dependent on another. Tasks can run simultaneously. Synchronous is a blocking architecture, so the execution of each operation is dependent on the completion of the one before it 
+
+
+=>>>Reactive Programming is the new programming paradigm
+Asynchrous and non-blocking
+Data flows as the Event/Message driven stream
+Functional Style Code 
+BackPressure on data stream 
+
+****When to use Reactive Programming
+>>>Use reactive programming when there is a need to build and support High load with the available resources
+Example - App need to support 400 TPS (transaction per second)
+
+
+=>>> Reactive programming deals with the data flow
+Suppose App is requesting for the data from the DB
+DB in response sent back the data to the App as Reactive Stream Data
+If Overwhelmed the App with more data, then App send the cancel() request to DB , in order to stop the data sending
+
+BackPressure - App controlling data flow,
+App is requesting for data from the DB, [in this case in the requesting number of events of Data Stream is mentioned initially , if data needed more then request for more data or else calcel the request]
+
+
+Reactive App Architecture
+-----------------------------
+
+>> App contains Embeded Servers
+>> and that server can handle request using non-blocking style
+>> Netty is the non-blocking server uses Event Loop Model
+
+>>Project Reactor is used for writing non-blocking codes
+
+>>Spring WebFlux uses Netty and Project Reactor for writing non-blocking or reactive APIs.
+
+
+
+NonBlocking or Reactive RestFull API
+---------------------------------------
+
+=>>> NonBlocking or RestFull ReactiveAPI is build using SpringWebFlux
+=>>> So, the app which has been build using SpringWebFlux is having embeded server Netty , where as Netty is the NonBlocking server
+=>>> and the NonBlocking Rest API is build using Project Reactor which is also preesnt within SpringWebFlux
+
+Project Reactor - Flux Mono
+------------------------------
+
+Official documentation >>>
+Google search -> flux reactor
+google search -> mono reactor
+
+
+
+*********************************************************************************************************************************************************
+
+Project Setup
+---------------
+
+Code Reference = https://github.com/dilipsundarraj1/reactive-spring-webflux
+
+
+1)import the downloaded project on the Intellij IDEA
+
+2)File -> settings -> Build,Execution,Deployment -> Annotation Processors -> enable annotation processing -> Apply 
+(this will include the Lombok in Intellij IDEA)
+
+3)File -> plugins -> spring assistant -> install on intellij
+
+4) Flux (Handles Multiple elements and even infinite lements)
+-----------------------------------------------------------------
+
+=> add Flux code on the FluxAndMonoGeneratorService class of (reactive-programming-using-reactor) module (existing class comes with the downloaded project)
+
+File - FluxAndMonoGeneratorService.java
+----------------------------------------
+package com.learnreactiveprogramming.service;
+
+import reactor.core.publisher.Flux;
+
+import java.util.List;
+
+public class FluxAndMonoGeneratorService {
+
+    public Flux<String> namesFlux(){
+       return Flux.fromIterable(List.of("Anne","book","pencil","pen"));
+    }
+
+    public static void main(String[] args) {
+
+        FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
+        fluxAndMonoGeneratorService.namesFlux()
+                .subscribe(name -> {
+                    System.out.println("Name is =" + name);
+                });
+
+    }
+}
+
+
+5) Mono - (Handles Single elements)
+------------------------------------
+
+=>same class like Flux code exist , there we need to add the code for Mono
+
+package com.learnreactiveprogramming.service;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+public class FluxAndMonoGeneratorService {
+
+//code for Flux
+
+    public Flux<String> namesFlux(){
+       return Flux.fromIterable(List.of("Antena","book","pencil","pen"));
+    }
+
+//code for Mono
+
+    public Mono<String> nameMono(){
+        return Mono.just("Antena");
+    }
+
+    public static void main(String[] args) {
+
+        FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
+
+   //subscribinng Flux code
+        fluxAndMonoGeneratorService.namesFlux()
+                .subscribe(name -> {
+                    System.out.println("Name is =" + name);
+                });
+
+
+  //subscribing Mono code
+        fluxAndMonoGeneratorService.nameMono()
+                .subscribe(name -> {
+                    System.out.println("Mono name =" + name);
+                });
+
+    }
+}
+
+
+NOTE :-
+************
+
+=>> backend application need to talk with the DB (Database) in order to fetch data from it
+=>> In reactive programming pattern , DB/external service which is producing data is Producer and the backend application which is consuming/subcribing data from the DB/external service is called Subscriber.
+
+=>> at first application(Subscriber) will trigger the Request[requestForData() ] to the DB and DB will return send back the subscribe() request to the Subscriber(backend application/service)
+
+=>> Subscriber will then send the request() method to the Producer
+=>> DB/external service(Producer) which is then send back the data to the Subscriber via onNext() method
+=>> continues to sent until the last record 
+=>> on completion DB/External service sent the onComplete() method to the Subscriber
+
+=>> Backend-service = Subscriber , DB/External-Service = Producer
+
+
+
+**************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+Spring WebFlux
+==================
+
+=>>> Spring WebFlux is using Netty and Project Reactor for writing Non-Blocking Rest APIs.
+
+=>>> Reference of Spring WebFlux ->>
+google seacrh -> wen on reactice search
+
+Reference ->  https://docs.spring.io/spring-framework/reference/web/webflux.html
+
+
+=>>> Spring WebFlux provides 2 approach for building REST APIs
+1)Annotated Controller
+2)Functional end Points
+
+
+
+=>>>    Movies Application using Microservice pattern (Microservice pattern for building Movies application in Non-Blocking REST API)   <<<=
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+[PROJECT SETUP]
+----------------
+
+>> there are 3 microservices = MoviesService , MoviesInfoService , MoviesReviewService
+>> clients/users calls are first trigger on MoviesService  and then calls are migrated to MoviesInfoService and MoviesReviewService
+
+>> MoviesInfoService save/retrive data from MongoDB (database) [payload - Name ,cast,year] and Spring WebFlux uses Annotated apptroach for building API in MoviesInfoService
+
+>> MoviesReviewService save/retrive data from MongoDB(database) [payload - Rating,Review], and Spring WebFlux uses Functional end points approach for building REST APIS
+
+
+Note :-
+
+>>> in order to create new module in Intellij
+>>> project-folder > New > Module > choose Spring Assistant
+
+ [Spring Assistant plugin is not supported in newer version of Intellij]
+
+>>> provide GroupdId and ArtifactId and add dependency
+Dependency -> [Spring Reactive Web , Spring Data Rective MongoDB , validation , Embeded MongoDB Database]
+
+>>> after creating module project within the existing project , then
+>>> edit settings.gradle file
++ include 'movies-info-service'
+
+>>> after that run the main() method in order to check whether the application is up and running fine
+
+
+
+

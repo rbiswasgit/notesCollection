@@ -1,0 +1,81 @@
+-- round 
+
+SELECT round(107.088, 2) from dual
+
+
+SELECT round(107.088, 3) from dual
+
+
+SELECT round(107.0887, 3) from dual // 107.089
+
+
+SELECT round(107.9) from dual // as there is no decimal palce given , so 107 will be incremented by 1 i.e. 108...o/p = 108
+
+-- trunc = trunc does not round value
+
+SELECT trunc(107.938439849) from dual
+
+
+SELECT trunc(107.938439849, 3) from dual
+
+
+SELECT trunc(107.938439849, 5) from dual
+
+-- sysdate 
+
+SELECT sysdate from dual
+
+-- systimestamp 
+
+SELECT systimestamp from dual
+
+-- add_months 
+
+SELECT add_months('11/17/2012', 3)
+from dual
+
+
+SELECT add_months('11/17/2012', -3)
+from dual
+
+
+SELECT add_months(sysdate, -3)
+from dual
+
+
+SELECT add_months(sysdate, +100)
+from dual
+
+-- months_between 
+
+SELECT months_between('12/15/2012', '12/4/2013')
+from dual
+
+
+SELECT months_between('12/4/2013', '12/15/2012')
+from dual
+
+
+SELECT months_between('12/4/2013', '12/4/2012')
+from dual
+
+
+SELECT trunc(systimestamp) from dual
+
+
+SELECT trunc(systimestamp, 'YEAR') from dual 
+
+
+SELECT trunc(systimestamp, 'MONTH') from dual ---//in case of trunc() with MONTH.....gives o/p as 1 of that month (MONTH specified as an argument)
+
+
+SELECT hiredate, trunc(hiredate, 'MONTH') from emp
+
+
+SELECT ename, hiredate, trunc(hiredate, 'MONTH') from emp
+
+
+SELECT ename, hiredate, trunc(hiredate, 'MONTH')  //returns the employee those are hired on 1982
+from emp
+where trunc(hiredate, 'YEAR') = '01/01/1982'
+

@@ -1,0 +1,74 @@
+SOAP UI :-
+
+What is SoapUI
+------------------------
+API Testing Tool
+For manual and automation testing of SOAP and REST APIs
+
+
+Why to use SoapUI
+------------------------------
+1. To create quick and efficient API tests
+2. To create API functional, performance and security tests
+3. To create API Testing automation framework
+
+
+Step 1 : Download SoapUI from - https://www.soapui.org/downloads/late...
+
+
+-------------
+
+open CMD
+
+git init
+
+git status
+
+git add --all /git add .
+
+git commit --m "message"
+
+git push
+
+==========================================
+
+username = riyagithub30
+passwprd = amibhalo30
+email id = rbiswas30@gmail.com
+status = Active
+
+==========================================
+
+Git user name = rbiswasgit
+password = amibhalo30
+email = riyaluv2code@gmail.com
+password = luv2code
+Status = Active
+
+---------------------------------------------------
+Antivirus extend
+
+https://www.mcafee.com/consumer/en-in/landing-page/retention/mls-family/livesafe.html?campaignid=0&clicksrc=ngmalert&clientid=a3438ee45017474f9f68cd1fb85a833d-b4bfdbcad218&cohortid=0&cui=a3438ee45017474f9f68cd1fb85a833d-b4bfdbcad218&EulaDt=20191130&EulaState=1&expdt=20201130&experimentid=5071&hardware_id=0bdf95aa5ea761b908100cc11e18263d&iprdt=20191130&isreboot=True&lang=en-us&langid=1&LaunchPoint=3&lcid=1033&messageid=1e8d2260-cabd-489a-99ef-c26943c8418f&OCEnable=1&ocsku=714-187-51615&pkgid=431&rcode=WSS16028&rnwsrc=ngm&segid=14&segtyid=1&sessionid=C4F495FE-4593-45CC-8D5B-1BAAE4594F80&version=18.8&xexpdt=20201230&affid=714&build_id=714&culture=EN-IN&ee=0&lcode=EN-IN&pkg_id=430&sublength=12m&subscription_length=1Y&substatus=active&subtype=pos&term=11&termtype=1&trial=6&upt=1&webexpiry=true&env=prod&flexlictransition=1&arflag=0&csrc=ngm&crd=20201120&csrcl2=others&cupf=1&ipcul=EN-IN&ccoe=retention&ccoel2=pos&ipst=WB&ipcon=IN&cctype=others
+
+
+
+
+
+-------------------
+
+INC000079138653 - Keyboard problem in PC
+
+
+
+-------------------
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,152 @@
+
+************************************************************  Angular Project - ecom *********************************************************************
+
+Steps :-
+------------
+
+1)Create an angular project
+
+Terminal
+--------
+ng new angular-ecommerce
+
+-->>>edit index.html >> add bootstrap css stylesheet link, from www.getbootstrap.com site
+-->>> add container div on the app.component.html file
+
+2)Create a Angular component for Product-List
+
+Terminal
+----------
+ng generate component components/product-list
+
+-->>>take out the selector value from the product-list.component.ts and paste it in the app.component.ts as tag
+
+File - Product-list.component.ts
+ selector: 'app-product-list',
+
+File - app.component.html
+<div class="container">
+  <h1 class="mt-3 mb-3">Products</h1>
+  <app-product-list></app-product-list>
+</div>
+
+3)Develop TypeScript class for Product
+
+Terminal
+---------
+ng generate class common/Product
+
+>>write constructor with the proprties specified
+
+4)Create Angular service to call REST APIs
+
+Terminal
+---------
+ng generate service services/product
+
+-->>> after creating a service file , edit the app.module.ts file
+add HttpClientModule
+on imports section 
+
+File - module.ts
+import {HttpClientModule} from '@angular/common/http'
+ imports: [
+    BrowserModule,
+    HttpClientModule
+  ],
+-->>> after that add ProductService on the  providers: [ProductService]
+-->>> so, that the ProductService will be available all over the project flow
+
+File - product.sevice.ts
+-------------------------
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Product } from '../common/product';
+import {map} from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+
+  private baseUrl = 'http://localhost:8080/api/products';
+
+  constructor(private httpClient: HttpClient) { }
+
+ getProductList(): Observable<Product[]>{
+   return this.httpClient.get<GetResponse>(this.baseUrl).pipe(
+      map(response => response._embedded.products)
+   );
+ }
+
+}
+
+interface GetResponse{
+  _embedded:{
+    products:Product[];
+  }
+}
+
+
+**** Note - 
+Returns an Observable
+Map the JSON data from Spring Data REST to Product array
+
+
+5)Update Angular Component to subscribe to data from Angular service
+
+-->>>after subscribe only data can be fetched from the REST service.
+-->>>angular service is required to call/connect to the Backend REST service 
+
+File - product-list.component.ts
+---------------------------------
+import { Component, OnInit } from '@angular/core';
+import { Product } from 'src/app/common/product';
+import { ProductService } from 'src/app/services/product.service';
+
+@Component({
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.css']
+})
+export class ProductListComponent implements OnInit {
+
+  products :Product[] = [];
+  constructor(private productService : ProductService) { }
+
+  //ngOnInit() acts as the @PostConstruct 
+  ngOnInit(): void {
+    this.listProducts();
+  }
+
+  listProducts() {
+    //after subscribe only data will be fetched
+    this.productService.getProductList().subscribe(
+      data=>{
+        this.products = data;
+      }
+    )
+  }
+}
+
+
+6)Display the data in the HTML page
+
+7)Add cross-origin support to the SpringBoot App 
+
+-->>>browser can not connect with differebt origin application due to CORS Policy
+-->>>Origin is more than the portname
+
+Origin = protocol + hostname + port
+
+Example -
+
+Same Origin
+http://localhost:4200 == http://localhost:4200
+
+Different Origin
+http://localhost:4200 != http://localhost:8080
+
+-->>>In order to overcome the different origin problem, as frontend is having one URL and backend is having different URL
+@CrossOrign annotation is used in backend application , Repository page

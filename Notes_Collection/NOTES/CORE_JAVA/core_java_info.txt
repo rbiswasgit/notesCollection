@@ -1,0 +1,476 @@
+
+Operators and Operations with Primitive Type
+------------------------------------------------
+------------------------------------------------
+
+
+==>> Interger Pool 
+>> Java contains Interger Pool, and it store values from the range -128 to 127
+Example -
+Interger i1= 128;
+Integer i2 = 128;
+
+	System.out.println("(i1 == i2) =>>>"+ (i1==i2)); //false 
+
+here Integer is the Reference type , so it holds the reference value of the variable
+here 128 does not come in the range of Integer pool limit i.e. -128 to 127 
+that is why Integer i1 and Integer i2 holds the different address
+
+Integer i3 = 127;
+Integer i4 = 127;
+
+   System.out.println("(i3 == i4) =>>>"+ (i3==i4));//true
+
+ due to the Integer pool, i3 and i4 both refer to the same memory address
+ as Integer pool integer value limit is -128 to 127
+
+
+Java Memory Model
+----------------------
+----------------------
+
+
+Console Input
+------------------
+------------------
+
+>>Scanner s = new Scanner(System.in);
+present in java.util package
+
+
+
+Control Statements
+-------------------------
+-------------------------
+
+1) if-else , if-elseif block
+
+
+2)switch
+
+
+
+=>> Difference between if-else vs switch
+
+
+
+Random Number Generation
+-----------------------------
+-----------------------------
+
+
+import java.util.Random;
+
+public class RandomNumberDemo {
+
+	public static void main(String[] args) {
+		//Random Number Generate
+		Random random = new Random();
+		System.out.println("Any random int ="+ random.nextInt());  //any random integer value
+		System.out.println("Any random int fom 0 to 99 ="+ random.nextInt(100));  //any integer from 0 to 99
+		System.out.println("Any random int from 1 to 100 ="+ random.nextInt(100)+1); //any integer from 1 to 100
+	}
+
+}
+
+
+*************    Exception Handling  *****************:-
+**********************************************************
+
+>>Exception is the situation where program unable to prdict the wrong input/ out of scope calculation etc and this is called Exception
+Example -
+
+A program which excepts file location from the User as the input but
+user provides the wrong file location as input to the Program
+in this caseprogram is unable to predict this situation and throws error , that is Exception , where program unable to handle the execution of the flow of the program and that leads to the error situation.
+
+so, Exception needs to be handled.
+
+
+Example-
+1) NullPointer Exception
+---------------------------
+
+public class NullPonterException {
+
+	public static void main(String[] args) {
+		// NullPointerException
+		User user = null;
+		double orderPrice = 199.99;
+		chargeUser(user,orderPrice);
+	}
+
+	private static void chargeUser(User user, double orderPrice) {
+		// this method will set the amount of user after deduction of orderPrice
+		user.setAmountOfMoney(user.getAmountOfMoney() - orderPrice);	
+	}
+}
+class User{
+	
+	private double amountOfMoney;
+
+	public double getAmountOfMoney() {
+		return amountOfMoney;
+	}
+
+	public void setAmountOfMoney(double amountOfMoney) {
+		this.amountOfMoney = amountOfMoney;
+	}
+	
+}
+
+=>> above example throws NullPointer Exception as User variable is set to null and order price is trying to do substraction in order to get the amountOfmoney of user.
+
+==>>> Exceptions are of 2 types of Exception Checked Exception and UnChecked Exceptions
+
+Checked Exception (compile Time Exception)
+********************************************
+
+>> Checked Exceptions are the compile time exception
+>>For Example - 
+In a program , user need to provide the File Location to the program as the input/request body but it is unable to predict by the program , what will be the correct file location means whether that file is actually present in that user provided file location or not
+That is why Checked Exceptions are the compile time Exception.
+
+Example - FileNotFound Exception , IOException , SQLException
+
+Example -
+  public class CheckedException {
+
+	public static void main(String[] args) {
+		// Checked Exception - Compile Time Exception
+		
+		Files.readAllLines(Paths.get("path to non existing file.txt")); //it gives Compile time Exception as File name/
+		                                                       //correct file location is not possible for the programmer to predict
+															   //earlier
+			
+	 }
+  }
+
+
+UnChecked Exception (Runtime Exception)
+******************************************
+
+>> UnChecked Exceptions are appear during Runtime
+>> UnChecked Exceptions are unable to predict during the compile time and it is mostly appear during Runtime
+>> UnChecked Exceptions are not really depend on the user input/Request object
+
+Example - NullPointer Exception is the UnChecked Exceptuion
+
+
+>>> Throwable is the base class 
+>>> Error and Exception are the group under Throwable class
+
+>>> Error is the situation where program/programmer/developer is unable to predict and it occurs at Runtime
+like OutOfMemoryError, StackOverFlowError , ThreadDeath i.e. those are either System related or JVM relate which is unpredictable by the Programmer/Program itself.
+
+>> Error are grouped under UnChecked Exception
+
+
+Reference ->
+=>> Check all the Exception Hirachey
+ Exclipse -> Alt+Shift+T -> F4
+
+ Example of Exception Handling  :-
+ ---------------------------------
+ try - catch block
+ ------------------
+
+1)
+
+	import java.io.IOException;
+	import java.nio.file.Files;
+	import java.nio.file.Paths;
+	import java.util.Arrays;
+
+	public class ExceptionHandling {
+
+		public static void main(String[] args) {
+			// Exception Handling using try - catch block
+			
+			try {
+				Files.readAllLines(Paths.get("fileName.txt"));
+			} catch (IOException e) {
+				
+				System.out.println("**** we are inside catch block ****");
+				System.out.println("**We can log stack trace ***"
+						+ Arrays.toString(e.getStackTrace()));
+			
+				e.getCause(); //get original exception
+				e.getMessage();  //get message which is associated with the exception
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+2) Multiple Ctach Example
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class MultipleCatchBlock {
+
+	public static void main(String[] args) {
+
+		try {
+			Files.readAllLines(Paths.get("fileNAme.txt"));
+			Connection conn = DriverManager.getConnection("");
+			
+		} catch (IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	//--	
+		try{
+			Files.readAllLines(Paths.get("FileName.txt"));
+			Connection conn = DriverManager.getConnection("");
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+	//--
+		try{
+			Files.readAllLines(Paths.get(""));
+			FileReader file = new FileReader("fileName.txt");
+		}
+		catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		
+	//--UnReachable Catch block
+		//catch block is unreachable because IOException is the generic exception for File related classes
+		//and FileNotFoundException is the child class of IOException class 
+		/*
+		try {
+			Files.readAllLines(Paths.get(""));
+			FileReader file = new FileReader("someFile.txt");
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
+		*/
+	}
+}
+
+finally block
+---------------
+
+=>> finally block will be excuted all the time
+=>> with or without exception
+=>> finally bolock will not be executed till end if we stop the execution of the programm i.e. stopping the JVM (System.exit(0))
+=>> finally blovk will not be executed till end if some exceptions are occur inside the finally block
+
+Example -
+public class FinallyBlockDemo {
+
+	public static void main(String[] args) {
+		//Finally block
+		
+		try {
+			Files.readAllLines(Paths.get("fileName.txt"));
+		} catch (IOException e) {
+			
+			System.out.println("** inside catch block ***");
+			System.out.println("print message" + Arrays.toString(e.getStackTrace()));
+			
+			e.getCause();
+			e.getMessage();
+			e.printStackTrace();
+		}
+		finally{
+			
+			//System.exit(0);
+			//throw new RuntimeException("");
+			
+			System.out.println("Finally block will be executed with and without exception");
+			
+			
+			
+		}
+	}
+
+}
+
+
+throws (keyword)
+------------------
+
+=>> throws is the keyword which tells or provides warning that the class/method will throw an exception and that need to be handled
+=>> if we extend the class which uses the throws keyword, so the derived class should have to handle the exception
+
+Example ->
+
+
+	public class ThrowsDemo {
+
+		public static void main(String[] args) {
+			// Throws Demo
+			
+			ThrowsDemo demo = new ThrowsDemo();
+			//demo.getMethod(); //error - compile time error because getMethod() uses throws keyword which tell or warns that the 
+			                    //method can throw an exception and that needs to be handled , that is why calling demo.getMethod() 
+								//gives compile time error, that is why calling this method needs to be handled
+		}
+
+		public void getMethod() throws FileNotFoundException {
+			
+			
+		}
+
+	}
+
+	class OverrideThrowsDemo extends ThrowsDemo{
+		
+		@Override
+		//public void getMethod()throws IOException{ //throws if we write IOException instead of the compatible exception 
+													//then it gives the compile time error
+		public void getMethod()throws FileNotFoundException{ //if we mention the compatible exception class with the throws keyword
+															//as this is the overridden method
+			
+		}
+		
+	}
+
+
+throw  (statement)
+--------------------
+
+=>>> 
+
+
+Example - 
+
+public class ThrowDemo {
+
+	public static void main(String[] args) {
+		ThrowDemo demo = new ThrowDemo();
+		demo.doSend(null,null,0);
+
+	}
+
+	public void doSend(Account to,Account from, double moneyTrans) {
+		// implement throw statement
+		//using throw , we can create instance of any class which extends the Throwable class
+		
+		if(to == null | from == null | to.getMoney() < moneyTrans){
+		  //	throw new IllegalArgumentException();
+         //   throw new IllegalArgumentException("Invalid arguments");
+			//throw new RuntimeException(new FileNotFoundException());
+		}
+		
+	}
+	
+	public void deDSend2(Account to, Account from, double monetTrns) throws NoEmounghException{
+		if(to == null | from == null){
+			throw new IllegalArgumentException();
+		}
+		else if(to.getMoney() < monetTrns){
+			throw new NoEmounghException();
+		}
+		else{
+			
+		}
+	}
+
+}
+
+class Account{
+	double money;
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
+	}
+	
+	
+}
+
+//user defined exception class
+package com.java.core.exception;
+
+//Extending RuntimeException is used for Unchecked exception
+//public class NoEmounghException extends RuntimeException{ //for UnChecked Exception
+public class NoEmounghException extends Exception{ //for checked Exception
+
+}
+
+
+***********************************************************************************************************************************************************
+
+Object Oriented Programming (OOP)
+----------------------------------
+
+q) What is OOP ?
+
+=>> Object Oriented Programming is the software design approach in which concept of objects occupies the first place
+
+
+q) what is object ?
+
+=>> object,first of all is the virtual entity with the specific list of properties , which can distinguish it from other objects and behaviour which allow to manipulate with these properties.
+
+OBJECT = DATA + BEHAVIOUR
+
+=>> In OOP , everything is the object , Array is the object , database connection is the object , unexpected situation during the program execution is the object
+
+Example -
+ =>> an object say a Car is the object , which should have Properties and Behaviour
+ properties ->
+ door,color,engine,Trunk,wheels,Headlights,Body etc
+ Behaviour -> start,stop,move etc
+
+q)What is class ?
+
+=>>Class is the template for objects
+
+Ex-
+A car manufacturer company has the design/templete for the car design , that includes properties(variables) and behaviour(methods)
+when a car is manufactured from this design/template then it is called as Object and the templete/design is called as Class
+
+
+Basic Principles of OOPs
+-----------------------------
+
+-> Inheritance
+-> Polymorphism
+-> Encapsulation
+-> Abstraction
+
+Inheritance ->
+
+Inheritance allow to create new class based on the another one
+New class can extend existing class and can share properties and behaviour
+New class is called derived/child class and existing/basic class is called parent class/base class
+Inheritance allow you to create new classes without reinventing the wheel
+
+Example -
+we have a Car class - which is consider as the base/parent class
+now if we want to design another car say SPORTS car or Family Car then we need to extends the Car class and can reuse the properties of car class and can add extra features/properties that new car design say SOPRTS car/Family Car need
+
+Encapsulation ->
+
+This key principle tells us to keep data and code that can manipulate this data together.
+It is also about keeping data and code safe from the external interferance.

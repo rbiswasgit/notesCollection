@@ -1,0 +1,693 @@
+
+Online compiler
+****************
+
+
+https://www.programiz.com/java-programming/online-compiler/
+
+
+https://www.programiz.com/sql/online-compiler/
+
+
+
+
+*************************************************************************************************************************************************************
+
+1) Populate deck of crads (52 card values) into a List
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CardsProgram {
+
+	public static void main(String[] args) {
+		List<Cards> cardList = new ArrayList<Cards>();
+		
+		//Steps - 
+		//create a List of cardFace values - cardFaceList
+		//Create a List of cardValue list - cardValueList
+		
+		//traverse through the 2 forEach i.e. cardFaceList and cardValueList and populate the card List
+		
+		for(int i=0;i<52;i++){
+			/*cardList.add(new Card("Heart","Ace"));
+			cardList.add(new Card("Heart","jack"));
+			cardList.add(new Card("Heart","Ace"));
+			cardList.add(new Card("Heart","Ace"));
+			cardList.add(new Card("Heart","Ace"));*/
+		}
+
+	}
+
+}
+
+class Cards{
+	String cardFace; //  4 types heart , spade,diamond,club
+	String cardValue; //13 types Ace ,2-10 , jack,queen,king
+	public Cards(String cardFace, String cardValue) {
+		super();
+		this.cardFace = cardFace;
+		this.cardValue = cardValue;
+	}
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2)STACK DS
+
+-->> Stack DS follows LIFO (Last In first Out)
+-->> Stack is a Liner Data Structure
+-->> Insertion and Deletion operations are performed from the one end i.e. TOP
+
+**STACK - PUSH Operation
+--------------------------------
+
+
+=============================================================================================================================================================
+
+
+3) Max number from List Using Stream API
+-----------------------------------------
+
+	List<Integer> numList = Arrays.asList(2, 4, 1, 3, 7, 5, 9, 6, 8);
+		
+	Optional<Integer> opNumList = numList.stream().max((i,j) -> i.compareTo(j));
+		
+	System.out.println(opNumList.get());
+
+=============================================================================================================================================================================
+
+4)Third Largest Number from List using Stream API
+--------------------------------------------------
+
+int thirdLrgestNum =  numbers.stream()
+	    		  				.distinct()
+	    		  				.sorted(Comparator.reverseOrder())
+	    		  				.limit(3)
+	    		  				.skip(2)
+	    		  				.findFirst()
+	    		  				.get();
+
+=========================================================================================================================================================================================================
+
+5)Find second max salary using SQL query
+-----------------------------------------
+
+select max(salary) from Employee where salary not in(select max(salary) from Employee);
+
+
+
+=====================================================================================================================================================================================================
+
+6)Third max salary using SQL query
+-----------------------------------
+
+SELECT DISTINCT salary FROM employee ORDER BY salary DESC LIMIT 1, 2;
+
+
+Note = LIMIT 1,2 means that you want 1 row after have skipped 2 rows.
+
+
+===================================================================================================================================================================================================
+7)Max salary using SQL query
+-------------------------------
+
+select max(salary) from Employee;
+
+
+
+==========================================================================================================================================================================================================
+
+8)Singleton class and its implementation
+
+
+9)query param vs Request param
+
+10)Comparator vs Comparable
+
+================================================================================================================================================================================================
+
+11)Controller Vs RestController
+
+@Controller annotation
+--------------------------
+
+>>It is used for non API endpoints
+>>it is used for specify controller end points
+>>@Controller annotaion contains below annotation
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Controller {
+
+
+@RestController
+----------------
+>>@RestController and @Controller work same
+>>@RestController contains @Controller annotation and also @ResponseBody
+>>mostly used as the Rest Controller endPoints
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Controller
+@ResponseBody
+public @interface RestController {
+
+==========================================================================================================================================================================================================================================================================================================================
+
+12)Collection framework - Map interface
+
+implement the HashMap and print only the values of the Map
+
+import java.util.*;
+
+class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+        
+        Map<Integer,String> numberMap = new HashMap<Integer,String>();
+        numberMap.put(1,"ABC");
+        numberMap.put(2,"AB1C");
+        numberMap.put(3,"ABC2");
+        numberMap.put(4,"ABC3");
+        
+        System.out.println("Map Value = " + numberMap.values());
+        
+        Set<Integer> keys = numberMap.keySet();
+        for(Integer tempKeys : keys)
+        {
+           System.out.println("Map Key = " +tempKeys);
+        }
+    }
+}
+
+=============================================================================================================================================================
+
+13)Find the maximum number of order placed
+
+compiler = https://www.programiz.com/sql/online-compiler/
+
+select count(*) Orders,c.customer_id from Customers c,Orders o where 
+c.customer_id = o.customer_id 
+group by c.customer_id order by c.customer_id desc limit 1;
+
+=============================================================================================================================================================
+
+14)Collection Framework - Comparator Interface
+                         *********************** 
+
+=>>for customize sorting of the Collection , it should be Integer/String value not Object
+=>> Natural sorting order is ASC (Ascending)
+
+
+	public static void main(String[] args) {
+		
+		List<Integer> numberList = Arrays.asList(1,2,4,5,7,9,10,11,13,15,3,6);
+		
+		System.out.println("Before Sorting");
+		System.out.println(numberList);
+
+		System.out.println("----Natural sorting --ASC---by--- Collections.sort()-------");
+		Collections.sort(numberList);
+		System.out.println("After Sorting - Default natual sorting order is ASC");
+		System.out.println(numberList);
+		
+		System.out.println("----customize sorting --DESC---by--- Comparator Interface-------");
+		Collections.sort(numberList,(i1,i2) -> (i1<i2)?1:(i1>i2)?-1:0);
+		System.out.println(numberList);
+		
+	}
+
+=============================================================================================================================================================
+
+15)Java8 -Predicate
+   ******************
+
+=>>Predicate interface has only one abstract method (SAM)
+=>>test() is the abstract method which takes only one argument ans its return type is boolean
+
+public class PredicateJ8 {
+
+	public static void main(String[] args) {
+		
+		List<String> nameList = Arrays.asList("Katrina","Kareena","Prerna","Bhoot","Kamina");
+		
+		System.out.println("--------Listing names starts with K-------");
+		Predicate<String> testPredicate = s->s.charAt(0)=='K';
+		
+		for(String tempString : nameList){
+			//System.out.println("Listing all names");
+			//System.out.println(tempString);
+			
+			if(testPredicate.test(tempString))
+			{
+				System.out.println(tempString);
+			}
+		}
+		
+	}
+}
+
+=============================================================================================================================================================
+
+16)Java8 - Stream() API
+   **********************
+
+=>>If we want to represent a group of individual objects as a single entity then We should go for 
+collection.
+=>>If we want to process a group of objects from the collection then we should go for streams.
+
+
+Ex: filter()
+Stream s = c.stream();
+Stream s1 = s.filter(i -> i%2==0);
+
+=>> Hence to filter elements of collection based on some Boolean condition we should go for filter()
+method.
+
+Ex: map()
+
+=>> If we want to create a separate new object, for every object present in the collection based on our 
+requirement then we should go for map() method of Stream interface.
+
+
+Stream() API Example
+**********************
+public static void main(String[] args) {
+
+		System.out.println("-----Finding Even number from the List-- with--Steam API---");
+		
+		List<Integer> numberList = new ArrayList<Integer>();
+		for(int i=0;i<=10;i++)
+		{
+			numberList.add(i);
+		}
+		
+		//Stream() API filter() - when we need to filter out the condition and it returns the boolean 
+		//For Ex. stream().filter() is used when we want to find out the even number or not,
+		//below filter() contains the statement which returns the boolean value if n%2==0
+
+		List<Integer> evenNumList = numberList.stream()
+									.filter(n -> n%2==0)
+									.collect(Collectors.toList());
+		
+		System.out.println(evenNumList);
+	}
+
+
+public static void main(String[] args) {
+		
+		List<String> nameList = new ArrayList<String>();
+		nameList.add("riya");
+		nameList.add("biswas");
+		nameList.add("bhoot");
+		nameList.add("mango");
+		nameList.add("monkey");
+		
+		
+		//map() of stream() api used when we return the object/value not boolean value 
+		//in that example we need to convert to upper case letter
+		List<String> uppernameList = nameList.stream()
+									 .map(s -> s.toUpperCase())
+									 .collect(Collectors.toList());
+		
+		System.out.println(uppernameList);
+	}
+
+=============================================================================================================================================================
+
+17 Java8 - map vs flatmap()
+   *************************
+
+Example-
+public static void main(String[] args) {
+		//map() vs flatMap()
+		
+		List<String> fruitList = new ArrayList<String>();
+		fruitList.add("Mango");
+		fruitList.add("Apple");
+		fruitList.add("Guava");
+		fruitList.add("Grapes");
+		fruitList.add("Pinaples");
+		fruitList.add("Lichi");
+		
+		//using map()
+		List<Integer> fruitsLength = fruitList.stream()
+									.map(s -> s.length())
+									.collect(Collectors.toList());
+		System.out.println(fruitsLength);
+		
+		//using flatMap()
+		
+		List<List<Integer>> numberList = new ArrayList<>();
+		numberList.add(Arrays.asList(1,2,3));
+		numberList.add(Arrays.asList(4,5,6));
+		numberList.add(Arrays.asList(7,8,9));
+		numberList.add(Arrays.asList(10,2,5));
+		numberList.add(Arrays.asList(11,8,3));
+		
+		List<Integer> numberV1List = numberList.stream()
+									 .flatMap(list -> list.stream())
+									 .collect(Collectors.toList());
+		System.out.println(numberV1List);
+
+	}
+
+=============================================================================================================================================================
+
+18)Java sleep() vs wait()
+   ***********************
+
+ sleep() = sleep() will pause the execution of the thread for the specific interval of time in miliseconds.
+
+ wait() = wait() will pause the execution of the thread until notify() or notifyAll() methos is invoked.
+
+
+============================================================================================================================================================
+19) Springboot vs Spring Cloud
+
+SptingBoot = Springboot is used to craete the production ready application with the help of the spring.initializer. 
+     			 Springboot is used to create a standalone application.
+     			 SpringBoot features
+	     			 ->embeddeed tomcat server
+	     			 ->auto configuration (we need to write web.xml/applicationcontext.xml file in xml format or java code)
+	     			 ->Spring Data JPA(autometically connect to Hibernate without any configuartion)
+	     			 ->Global exception handling
+	     			 ->In-Memory database
+	     			 ->statrter dependencies
+
+Spring Cloud = Spring Cloud provides tools for developers to quickly build some of the common patterns in distributed systems
+					(e.g. configuration management, service discovery, circuit breakers, intelligent routing, micro-proxy, control bus, one-time tokens, global locks, leadership election, distributed sessions, cluster state)
+
+
+=============================================================================================================================================================
+20)
+primary vs unique key
+---------------------
+
+Primary key ->
+None of the fields that are part of the primary key can contain a null value. (primary key does not contain null value)
+
+A primary key is a single field or combination of fields that uniquely defines a record. None of the fields that are part of the primary key can contain a NULL value. A table can have only one primary key.
+
+
+Unique Key ->
+
+A unique constraint is a single field or combination of fields that uniquely defines a record. Some of the fields can contain null values as long as the combination of values is unique.
+
+Some of the fields that are part of the unique constraint can contain null values 
+as long as the combination of values is unique.
+(unique key can contain null value as long as the combination is unique)
+
+
+=============================================================================================================================================================
+21)
+Composite key
+
+Composite key is the combination of multiple columns is used to define a row uniquely.
+
+A combination of more than one column to identify record uniquely.
+
+
+=============================================================================================================================================================
+22)
+DELETE vs TRUNCATE
+
+Truncate ->
+
+Truncate will delete all records from the table.
+Truncate operation is faster as compared to DELETE operation
+Truncate does not affect any of the table's indexes, triggers, and dependencies.
+Truncate will not provide ROLL BACK
+
+syntax -
+TRUNCATE TABLE <table_name>;
+
+Delete ->
+
+Delete command will remove all records from the table
+Delete oprtation is slower as compared with the TRUNCATE command
+We can Roll Back the Delete statement in SQL
+
+
+=============================================================================================================================================================
+23)
+UNION vs UNIONALL
+
+	UNION
+	--------
+
+	the SQL UNION operator is used to combine the resultset of 2 or more SELECT statements.
+	It removes the duplicate rows between the various SELECT statements.
+	each SELECT statement within the UNION operator must have the same number of fields in the RESULTSET with the same data type. 
+
+	Syntax -
+
+	SELECT supplier_id
+	FROM suppliers
+	UNION
+	SELECT supplier_id
+	FROM orders
+	ORDER BY supplier_id;
+
+	SELECT supplier_id, supplier_name
+	FROM suppliers
+	WHERE supplier_id > 2000
+	UNION
+	SELECT company_id, company_name
+	FROM companies
+	WHERE company_id > 1000
+	ORDER BY 1;
+
+
+	Note - it is not mandatory to have all the filelds of SELECT statements of the UNION ALL operator should have same name, can have different field name but all the fields should have the same data type
+
+
+	UNION ALL
+	-----------
+
+	the SQL UNION ALL operator is used to combine the resultset of 2 or more SELECT statements.
+	It does not remove the duplicate rows between the SELECT staments (returs all the rows)
+
+	In UNION ALL operattor , all the SELECT statements should contains same number of fields in Resultset with same data types.
+
+	Syntax -
+
+	SELECT supplier_id
+	FROM suppliers
+	UNION ALL
+	SELECT supplier_id
+	FROM orders
+	ORDER BY supplier_id;
+
+	SELECT supplier_id, supplier_name
+	FROM suppliers
+	WHERE supplier_id > 2000
+	UNION ALL
+	SELECT company_id, company_name
+	FROM companies
+	WHERE company_id > 1000
+	ORDER BY 1;
+
+	Note - it is not mandatory to have all the filelds of SELECT statements of the UNION ALL operator should have same name, can have different field name but all the fields should have the same data type
+
+=============================================================================================================================================================
+
+24)
+DML vs DDL vs DQL vs DCL vs TCL
+--------------------------------
+
+DDL (Data Defination Language) ->
+
+	DDL deals with the DB schema and description , how data are stored into Database.
+	CREATE ,ALTER,DROP,TRUNCATE,RENAME,COMMENT
+
+
+DML (Data Manupulation Language) ->
+
+	DML deals with data manipulation and it includes most of the SQL statements like
+
+	SELECT - retrieve data from a database
+	INSERT - insert data into a table
+	UPDATE - updates existing data within a table
+	DELETE - Delete all records from a database table
+	MERGE - UPSERT operation (insert or update)
+	CALL - call a PL/SQL or Java subprogram
+	EXPLAIN PLAN - interpretation of the data access path
+	LOCK TABLE - concurrency Control
+
+
+DCL (Data Control Language) ->
+
+	DCL deals with the GRANT,permission,rights and other control of the Database.
+
+	GRANT - allow users access privileges to the database
+	REVOKE - withdraw users access privileges given by using the GRANT command
+
+TCL (Transaction Control Language) ->
+
+	TCL deals with the transaction within the Database.
+
+	COMMIT - commits a Transaction
+	ROLLBACK - rollback a transaction in case of any error occurs
+	SAVEPOINT - to rollback the transaction making points within groups
+	SET TRANSACTION - specify characteristics of the transaction
+
+
+DQL (Data query Language) ->
+
+	DQL deals with the performing query on the data in DB
+
+	SELECT statement is taking as the example for the DQL.
+
+=============================================================================================================================================================
+
+25) 
+Finding duplicate numbers from ArrayList of integer values
+-------------------------------------------------------------
+
+
+
+public class TestEx130 {
+
+	public static void main(String[] args) {
+		
+		/*
+		 * Finding duplicate numbers from ArrayList
+		 */
+		
+		List<Integer> numberList = Arrays.asList(1,2,3,3,4,5);
+		
+		Set<Integer> setList = new HashSet<Integer>();
+		
+		for(Integer tempNumber : numberList)
+		{
+			if(setList.add(tempNumber) == false)
+			{
+				System.out.println("Duplicate = " + tempNumber);
+			}
+		}
+
+}
+}
+
+=============================================================================================================================================================
+
+12)How to make a class a thread-safe
+Design pattern
+Thread.sleep() vs Thread.wait()
+flatMap() vs map() in java8
+map() method in JPA
+multithreading implementation in code
+executor method
+2nd height number in stream
+application context vs bean factory
+hibernate get() vs load()
+hibernate lazy loading
+how to deploy sprigboot application jar/war file on standalone tomacat server(tomcat server on browser) not on inbuld tomcat server
+how to deploy springboot application jar/war file on different web server (insted of inbuild tomcat)
+volatile variable
+Design pattern
+Microservice Design pattern
+RequestMapping vs POSTMapping
+Runnable vs callable
+how to call Microservice Asynchroniously
+application context vs Bean Factory
+JAVA 8 Features
+HashSet vs TreeSet
+how to create custom application.properties file
+bean scope
+bean life cycle - spring framework
+access specifier
+interface vs abstract class
+why we need Abstract class
+swap without 3rd variable
+hibernate vs JPA
+Find duplicate character in this string and the count of those duplicate characters.
+default annonimous class in java
+Annonimous calss
+using Java8 disply the student name with sorted rollnumber
+code quality testing tool - sonarQube
+Springboot vs Spring Cloud
+static methods
+spring MVC - listener
+hibernate object state
+sorting - not using inbuild method
+**concurrentException
+**concurrent HashMap
+**Filter in Intercerptor - validation of token
+concurrent HashMap
+lazyconcurrent exception
+Hibernate basic - configuration
+**asyn service call in java
+REST TEmplate - service call - api end point has token authorization - REST TESMPLATE call with authorization argument
+**Spring batches
+HashMAp vs LinkedHashMap vs Hash Table
+Junit , Mockito
+Microservice - Design Pattern
+Springboot - Design Pattern
+Marker Interface
+stringbuffer vs stringbuilder
+Finding duplicate numbers from ArrayList of integer values
+int vs Integer
+hhtp status code 301,401
+
+
+
+Angular
+----------
+why we use angular
+angular life cycle
+local storage vs session storage
+local object vs session object
+angular events
+how a different component can communicate or exchange data
+credential validation in angular - authenticate the request
+interceptor
+
+1  Do you know What is angular and what is the advantage?		
+2	Do you know What are decorators in Angular?		
+3	Do you know What an AOT compilation is? What are its advantages?		
+4	Do you know What are Components in Angular		
+5	Do you know What is an ngModule?		
+6	Do you know What are filters in Angular?		
+7	Do you know lifecycle hooks in Angular		
+8	Do you know the difference between AOT and JIT?		
+9	Do you know what is @Component Decorator		
+10	Do you know What Promises and Observables are in Angular?		
+11	Do you know What Eager and Lazy loading is?		
+12	Do you know the concept of dependency injection?		
+13	Do you know about MVVM architecture
+
+
+MySQL/SQL
+-----------
+union vs union all
+delete vs truncate
+primary vs foreign key vs composite key
+primary vs unique key
+SQl queries - Complex queries - JOIN , Group By
+Indexing
+DML vs DDL vs DQL vs DCL
+
+
+Java - Backend
+---------------
+
+1	Have you developed a microservice using Spring Boot on your own and how many years of experience in that?		
+2	Do you have Design/Architecture experience?		
+3	Do you have experience in connecting Spring Boot to Spring JPA? Do you know the process?		
+4	Do you have SQL experience? Experience in writing complex SQL Queries?		
+5	You have a million rows of data in DB. How did you design the API to retrieve data from DB? Do you know what to do?		
+6	Do you have experience in Design Patterns (Singleton, Factory, etc)?		
+7	Do you have experience in Data Structure (Array, Linked list, etc)?		
+8	Do you have experience in Java 8/11?		
+9	Do you have experience in Streams?		
+10	Do you know the difference between get and post?		
+11	Do you know the difference between an array and a list?		
+12	Do you know Spring Security or JWT, OAuth-related experience?		
+13	Do you have experience in CI/CD, Jenkins, and Git?

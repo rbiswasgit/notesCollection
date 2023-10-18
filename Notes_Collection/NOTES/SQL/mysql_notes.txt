@@ -1,0 +1,482 @@
+
+MYSQL COMMANDS
+-------------------------------------------------------------------------------------------------------------------
+
+1.The Maximum Value for a Column
+
+select max(article) as Article from shop;
+
+2.The Row Holding the Maximum of a Certain Column
+
+Task: Find the number, dealer, and price of the most expensive article.
+
+select article,dealer,price from shop where price = (select max(price) from shop);
+
+SELECT article, dealer, price
+FROM shop
+ORDER BY price DESC
+LIMIT 1;
+
+
+3. Maximum of Column per Group
+
+Task: Find the highest price per article.
+
+select article , max(price) from shop
+group by article
+order by article;
+
+
+4. Second highest salary
+
+select salary from Employee where salary not in (select max(salary) from employee);
+
+
+5. Third largest salary
+
+
+
+
+5.Using User-Defined Variables
+
+Task = Find the articles with the highest and lowest price you can do this
+
+mysql> selece @min_price:= MIN(price) , @max_price:= MAX(price) from shop;
+mysql> select *from shop whrere price = @min_price or price = @max_price;
+
+
+6. Foreign Key
+
+A foreign key relationship involves a parent table that holds the initial column values, and a child table with column values that reference the parent column values. A foreign key constraint is defined on the child table.
+
+https://dev.mysql.com/doc/refman/8.0/en/example-foreign-keys.html
+
+CREATE TABLE parent (
+    id INT NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=INNODB;
+
+
+CREATE TABLE child (
+    id INT,
+    parent_id INT,
+    INDEX par_ind (parent_id),
+    FOREIGN KEY (parent_id)
+        REFERENCES parent(id)
+) ENGINE=INNODB;
+
+=> in order to auto delete/update the records from parent/child  table CASCADe concept is used.
+
+DROP TABLE child;
+
+CREATE TABLE child (
+    id INT,
+    parent_id INT,
+    INDEX par_ind (parent_id),
+    FOREIGN KEY (parent_id)
+        REFERENCES parent(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=INNODB;
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+Table JOIN Syntax
+--------------------------------------------------------------------------------------------------------------------------------
+
+1)
+SELECT * FROM t1 LEFT JOIN (t2, t3, t4)
+                 ON (t2.a = t1.a AND t3.b = t1.b AND t4.c = t1.c)
+
+2)
+SELECT * FROM table1, table2;
+
+SELECT * FROM table1 INNER JOIN table2 ON table1.id = table2.id;
+
+SELECT * FROM table1 LEFT JOIN table2 ON table1.id = table2.id;
+
+SELECT * FROM table1 LEFT JOIN table2 USING (id);
+
+SELECT * FROM table1 LEFT JOIN table2 ON table1.id = table2.id
+  LEFT JOIN table3 ON table2.id = table3.id;
+  
+  
+  
+  
+--------------------------------------------------------------------------------------------------------------------------------
+Mysql CURSOR
+--------------------------------------------------------------------------------------------------------------------------------
+
+https://dev.mysql.com/doc/refman/8.0/en/cursors.html
+
+
+CREATE PROCEDURE curdemo()
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE a CHAR(16);
+  DECLARE b, c INT;
+  DECLARE cur1 CURSOR FOR SELECT id,data FROM test.t1;
+  DECLARE cur2 CURSOR FOR SELECT i FROM test.t2;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN cur1;
+  OPEN cur2;
+
+  read_loop: LOOP
+    FETCH cur1 INTO a, b;
+    FETCH cur2 INTO c;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+    IF b < c THEN
+      INSERT INTO test.t3 VALUES (a,b);
+    ELSE
+      INSERT INTO test.t3 VALUES (a,c);
+    END IF;
+  END LOOP;
+
+  CLOSE cur1;
+  CLOSE cur2;
+END;
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+MYSQL Stored Procedure
+-----------------------------------------------------------------------------------------------------------------------------------
+
+1)
+
+mysql> delimiter //
+mysql> CREATE PROCEDURE citycount (IN country CHAR(3), OUT cities INT)
+       BEGIN
+         SELECT COUNT(*) INTO cities FROM world.city
+         WHERE CountryCode = country;
+       END//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+
+mysql> CALL citycount('JPN', @cities);
+
+
+2)
+
+DELIMITER $$
+
+CREATE PROCEDURE GetOrderCountByStatus (
+	IN  orderStatus VARCHAR(25),
+	OUT total INT
+)
+BEGIN
+	SELECT COUNT(orderNumber)
+	INTO total
+	FROM orders
+	WHERE status = orderStatus;
+END$$
+
+DELIMITER ;
+
+
+3)
+
+DELIMITER $$
+
+CREATE PROCEDURE SetCounter(
+	INOUT counter INT,
+    IN inc INT
+)
+BEGIN
+	SET counter = counter + inc;
+END$$
+
+DELIMITER ;
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+CASE Statemnt
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+1. CASE
+
+DELIMITER |
+
+CREATE PROCEDURE p()
+  BEGIN
+    DECLARE v INT DEFAULT 1;
+
+    CASE v
+      WHEN 2 THEN SELECT v;
+      WHEN 3 THEN SELECT 0;
+      ELSE
+        BEGIN
+        END;
+    END CASE;
+  END;
+
+
+2. IF Statement
+
+DELIMITER //
+
+CREATE FUNCTION SimpleCompare(n INT, m INT)
+  RETURNS VARCHAR(20)
+
+  BEGIN
+    DECLARE s VARCHAR(20);
+
+    IF n > m THEN SET s = '>';
+    ELSEIF n = m THEN SET s = '=';
+    ELSE SET s = '<';
+    END IF;
+
+    SET s = CONCAT(n, ' ', s, ' ', m);
+
+    RETURN s;
+  END //
+
+DELIMITER ;
+
+
+3) LOOP Statement
+
+CREATE PROCEDURE doiterate(p1 INT)
+BEGIN
+  label1: LOOP
+    SET p1 = p1 + 1;
+    IF p1 < 10 THEN
+      ITERATE label1;
+    END IF;
+    LEAVE label1;
+  END LOOP label1;
+  SET @x = p1;
+END;
+
+
+4)REPEAT Statement
+
+
+mysql> CREATE PROCEDURE dorepeat(p1 INT)
+       BEGIN
+         SET @x = 0;
+         REPEAT
+           SET @x = @x + 1;
+         UNTIL @x > p1 END REPEAT;
+       END
+	   
+	   
+5)WHILE Stetement
+
+CREATE PROCEDURE dowhile()
+BEGIN
+  DECLARE v1 INT DEFAULT 5;
+
+  WHILE v1 > 0 DO
+    ...
+    SET v1 = v1 - 1;
+  END WHILE;
+END;
+
+
+*************************************************************************************************************************************************************
+STORED PROCEDURE - MYSQL - EXAMPLE
+***************** ******* ************
+
+1)
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `getAllEmployee`()
+BEGIN
+SELECT * FROM riyadb.employee;
+END
+
+call getAllEmployee();
+
+Note - Returns the list of records. Need not to write out statements for the same
+
+
+2)
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `find_total_emp`(OUT _total INT(10))
+BEGIN
+
+declare tot_value int default 0;
+
+select count(*) into tot_value from employee;
+
+set _total = tot_value;
+
+END
+
+3)Return the primary key value after inserting the data
+
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `save_user`(
+IN _username varchar(45),
+IN _password varchar(200),
+OUT _retId int(11)
+)
+BEGIN
+
+INSERT INTO `riyadb`.`users`
+(
+`username`,
+`password`)
+VALUES
+(
+_username,
+_password);
+
+set _retId = last_insert_id();
+
+
+END
+
+
+4)IF - ELSE STATEMENT
+-------------------------
+
+
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `save_update_userdata`(
+INOUT _userId int(11),
+IN _userName varchar(45))
+BEGIN
+
+IF _userId = 0 THEN
+  INSERT INTO `riyadb`.`usersdata`
+  (`userId`,
+  `userName`)
+  VALUES(
+  _userId,
+  _userName);
+    
+    set _userId = LAST_INSERT_ID();
+ELSE
+ update `riyadb`.`usersdata` set
+ `userId` = _userId ,
+ `userName` = _userName where `userId` = _userId;
+ 
+END IF;
+
+END
+
+
+5) IF ELSEIF STAEMENT
+-------------------------
+
+
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `get_employee_credit_level`(
+IN _id int(11),
+OUT _ret_credit_level varchar(25)
+)
+BEGIN
+
+declare credit_limit_val varchar(25);
+
+select credit_limit into credit_limit_val
+from employee
+where id = _id;
+
+IF credit_limit_val > '3000' THEN
+   set _ret_credit_level = 'PLATINUM';
+   
+ELSEIF credit_limit_val >= '1100' AND credit_limit_val <= '3000' THEN
+  set _ret_credit_level = 'GOLD';
+ELSE
+   set _ret_credit_level = 'SILVER';
+END IF;
+
+END
+
+
+6) CASE vs IF statement
+-----------------------
+
+==>> Both IF and CASE statements allow you to execute a block of code based on a specific condition. Choosing between IF or CASE sometimes is just a matter of personal preference
+
+==>> If you use the CASE statement, you have to make sure that at least one of the CASE condition is matched. Otherwise, you need to define an error handler to catch the error. Note that you do not have to do this with the IF statement.
+
+==> In some situations, you can use both IF and CASE to make the code more readable and efficient.
+
+
+7) CASE STATEMENT
+------------------
+
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `get_employee_bonus_details`(
+IN _id int(11),
+OUT _bonus_det varchar(25))
+BEGIN
+
+declare grade_value varchar(45);
+
+select grade into grade_value
+from employee
+where id = _id;
+
+CASE grade_value
+  WHEN 'P1' THEN
+      SET _bonus_det = '50%';
+  WHEN 'P2' THEN
+      SET _bonus_det = '40%';
+  WHEN 'P3' THEN
+     SET _bonus_det = '30%';
+  ELSE
+      SET _bonus_det = '20%';
+END CASE;
+
+END
+
+
+8)MULTI RETURN STATEMENT
+------------------------
+
+CREATE DEFINER=`riyalogin`@`%` PROCEDURE `get_employee_multi_return`(
+IN _id int(11),
+OUT _ret_max_sal double,
+OUT _ret_max_credit_limit int(10),
+OUT _ret_tot_emp int(10)
+)
+BEGIN
+
+select max(salary) into _ret_max_sal
+from employee;
+
+set _ret_max_credit_limit = 0;
+
+select count(*) into _ret_tot_emp
+from employee;
+
+END
+
+
+9)STORED FUNCTION
+---------------------
+
+==>>  A stored function is a special kind stored program that returns a single value. 
+==>>  Typically, you use stored functions to encapsulate common formulas or business rules that are reusable among SQL statements or stored programs.
+
+EXAMPLE-
+
+CREATE FUNCTION CustomerLevel(
+  credit DECIMAL(10,2)
+) 
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+    DECLARE customerLevel VARCHAR(20);
+
+    IF credit > 50000 THEN
+    SET customerLevel = 'PLATINUM';
+    ELSEIF (credit >= 50000 AND 
+      credit <= 10000) THEN
+        SET customerLevel = 'GOLD';
+    ELSEIF credit < 10000 THEN
+        SET customerLevel = 'SILVER';
+    END IF;
+  -- return the customer level
+  RETURN (customerLevel);
+END$$
+DELIMITER ;
+
+
+
+
+
+
+
+

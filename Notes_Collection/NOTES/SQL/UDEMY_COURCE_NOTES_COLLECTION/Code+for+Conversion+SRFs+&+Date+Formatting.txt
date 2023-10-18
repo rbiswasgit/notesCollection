@@ -1,0 +1,29 @@
+SELECT to_char(sysdate, 'mm-dd-yyyy') from dual //to_char is used for formating the date/numbers/digits....returns the date/numbers/digit in specified/formating template....to_char() returns in char/String format
+
+
+SELECT to_char(sysdate, 'mm/dd/yyyy') from dual
+
+
+SELECT to_char(sysdate, 'dd-mm-yyyy') from dual
+
+
+SELECT to_char(sysdate, 'ddth "of" month, yyyy') from dual
+
+-- Solution to assignment at 10:52 
+
+SELECT ename, sal, to_char(sal, '$99,999.99') salaries from emp
+
+-- to_date function //---to_date('str' , frmt) is used for converting string representation into date value/format..frmt = format will be provide as str format...
+..o/p will be in date format
+
+SELECT to_date('2012-08-27', 'yyyy-mm-dd'))
+from dual
+
+
+SELECT add_months(to_date('2012-08-27', 'yyyy-mm-dd'), 2)
+from dual
+
+
+SELECT to_date('3 of June, 2012', 'dd "of" Month, YYYY')
+from dual
+

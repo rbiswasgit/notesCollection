@@ -1,0 +1,109 @@
+Jenkins :-
+--------
+
+-> Jenkins detects the changes with the help of version control system (GIT) and perform 
+tasks repeatedly (Build , Test , Deploy , Package , Integrate).
+
+1) Continious Integration (CI)
+
+-> CI server continiously integrate newly checkedin code into build.
+
+-> Runs unit test and rejects the build if they fail (i.e email to the developer/haldler)
+regarding the failure.
+
+-> if unit test runs successfully then deploy builds to other server
+
+So CI is refered as build automation
+
+=> Whenever we commit changes in version control system
+then CI server will 
+i)integrate our system i.e changes with the project - build the code and produce executable
+package.
+
+ii) perform test on it
+and if all the steps executes successfully then CI server will deploy the code on the
+server where all the developer can view the changes
+
+II) **********Create First Job
+Step by step
+
+step 1:-
+login to jenkins - http://localhost:8080
+
+step 2-
+New Item / Create New Job
+
+step 3:
+
+Enter New Item name
+
+step 4-
+FreeStyle Project
+
+step 5-
+General Tab - > write description
+
+step 6-
+
+source code management - none
+
+step 7 -
+Build triggers - > choose build periodecally -> schedule (* * * * *) 
+run jenkin job every minute
+
+step 8 - 
+Build tab - execute shell
+cd project directory
+javac HeloWrld.java
+java HelloWrld
+
+-----------
+********Trigger a remote build + job chaining in Jenkins
+
+Jenkin job -> click on that job -> left side configure option
+-> Build Triggers -> Check only Trigger builds remotely
+->Authenticate (token - 1234 (as per users choice)
+
+->new tab ipaddress:8080/paste the url from Jenjins dashboard page/token = copy and paste the 
+token from jenkins authenticated area
+
+
+=======================================================================================
+DOCKER = Docker is the platform for developing  , shipping and running applications 
+using a container based virtualization technique.
+
+=======================================================================================
+
+****GIT and GITHUB Integration with Jenkins :-
+-----------------------------------------------
+
+GIT Commit Steps :-
+----------------------
+Step 1:-
+----------
+1) git status
+2)git add HelloWorld.class HelloWorld.java
+3) git commit -m "message" HelloWorld.class Helloworld.java
+4) git push -u origin master
+
+step2 :-
+-----------
+Login to personal Github
+
+1) login to gitgub.com with our personal information
+2) Repository Name
+3) create repository
+4) Got 2 oprtions - out of that choose push an existing repository from command line
+-> Run both the commands from that section on CMD and then provide git creadential to 
+proceed further
+
+step 3:-
+----------
+
+Integration with Jenkins
+
+1) 
+Jenkins Page -> create new item -> give item name as git repository name -> freestyle proj
+-> ok -> Gneral tab(provide descrption) -> source code management tab (choose git -> provide
+Repository URL) -> Build tab (choose Execute Shell) - {command = javac HelloWorld.java 
+java HelloWorld }

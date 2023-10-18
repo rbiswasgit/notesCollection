@@ -1,0 +1,158 @@
+ANGULAR.JS
+***************
+-----------------
+
+>> Traditional webpages are reloaded fully when user/client sent a request.
+
+>>Single page application where a part of the webpage is reloaded on the user request
+
+Development Setup - angular
+----------------------------
+
+https://github.com/darbyluv2code/fullstack-angular-and-springboot/tree/master/install-angular-tools/ms-windows
+
+https://github.com/darbyluv2code/fullstack-angular-and-springboot/blob/master/install-angular-tools/ms-windows/install-ms-windows.md
+
+==============================================================================================================================================================================
+
+**** INSTALL BELOW FOR THE ANGULAR SETUP
+
+1) Install VSCode
+https://code.visualstudio.com/
+
+2)Node Install
+
+ https://nodejs.org/download/release/v16.10.0/
+
+ >> select (.msi) file for the spefied sytem config(i.e. 32bit or 64bit)
+ >>Run the installer
+ >>After running the Installer , check the version
+ >>The Node installation also includes npm (Node Package Manager).
+
+**(node is similar to the Java JDK. And npm is similar to Maven.)
+
+3)Install tsc
+
+npm install --location=global typescript@4.6.4
+
+=============================================================================================================================================================
+-----------------------
+
+*** Angular CLI is required for creating the angular project
+
+-->> after installing the various software for Angular Development...lets check the versions for all the software
+
+Terminal
+---------
+node --version
+npm --version
+tsc --version
+ng version
+
+
+=====================================================================================================================================================================================
+
+*********************** CREATE AN ANGULAR PROJECT ***********************************
+
+syntax = ng new <project-name>
+
+Terminal
+---------
+ng new my-first-angular-project
+cd my-first-angular-project
+ng serve --open
+
+control-flow ->> index.html ->> app.component.ts ->> app.component.html
+
+-->>> open app-component.html  -->>> find (is running) -->>> cut the <span>{{ title }} app is running!</span> -->>> replace with the previously filled content with the <span>{{ title }} app is running!</span>  --->>> ng server --open
+
+Terminal
+--------
+ng new sales-project
+ng generate component sales-person-list
+ng generate class SalesPerson
+
+****** Project flow after adding a new component
+
+index.html -->> app.component.ts  -->> app.component.html -->> sales-person-list(new component, ng generate component sales-person-list)
+                                                                ->> add logic on the sales-person-list.component.ts (add a list of salesPerson on .ts file)
+                                                                ->> say for example display table in sales-person-list.compoent.html page
+
+For running an application >> Terminal >> ng serve --open
+
+
+
+=====================================================================================================================================================================================
+
+****************** Implementing Bootstrap (Refer sales-project)
+
+1) Go to the link on the browser
+https://getbootstrap.com/
+
+>>click on the getstarted option or docs >> take out the css link
+
+2) Link the css on the index.html file (Add the link to the index.html page)
+>> add the css bootstrap stylesheet link on the haed section of index.html file
+
+3)Add bootstrap css style on the component html file (app.component.html)
+
+<div class="container">
+<h1 class="mt-3 mb-3">Sales Team !</h1>
+
+<app-sales-person-list></app-sales-person-list>
+
+</div>
+
+
+4)Copy the sales-person.component.html and work on the copy file for adding bootstrap style
+
+>>add table class , thead class etc.
+
+5) Link the new html file on the .ts file
+
+File - sales-person-list.component.ts
+--------------------------------------
+@Component({
+  selector: 'app-sales-person-list',
+  //templateUrl: './sales-person-list.component.html',
+  templateUrl: './sales-person-list-bootstarp.component.html',
+  styleUrls: ['./sales-person-list.component.css']
+})
+
+
+Terminal
+----------
+ng serve --open
+
+
+*********************************** ANGULAR Conditions and Formatting ********************************
+
+Example - *ngFor , *ngIf , | currency :'USD' (pipe)  
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Volume</td>
+            <td>Quote ?</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let tempSalesList of salesPersonList">
+            <td>{{ tempSalesList.firstName }}</td>
+            <td>{{ tempSalesList.lastName }}</td>
+            <td>{{ tempSalesList.email }}</td>
+            <td>{{ tempSalesList.salesVolume | currency:'USD' }}</td>
+            <td>
+                <div *ngIf="tempSalesList.salesVolume >= 6000; else myElseBlock">YES</div>
+                <ng-template #myElseBlock>NO</ng-template>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+======================================================================================================================================================================================
+
+

@@ -1,0 +1,44 @@
+Docker Hub
+********************************************
+rbiswas30
+dockerR30!
+
+
+<<<<<<<  Reference  >>>>>>
+
+1)
+Install Docker Desktop on windows 10
+
+>>Register on docker hub portal
+>>Download Docker Desktop for windows from Docker Hub
+>>Double click on the Docker_Decktop_Installer.exe file
+>>Follow the steps for installing the Docker Desktop
+
+
+2)
+For error during WSL version update - this error is encountered when we install Docker Desktop on windows - after try to open the Docker Desktop app (Windows 100) -- How to fix: Docker desktop requires a newer wsl kernel version on Windows
+
+https://www.youtube.com/watch?v=zvnFtNlD1eo
+
+Steps-
+1. Open the Control Panel on your Windows machine
+2. Click on "Programs" and then "Turn Windows features on or off"
+3. Check the boxes for "Windows Subsystem For Linux", "Windows Hypervisor Platform", and "Virtual Machine Platform", then click "OK"
+4. Open PowerShell as an Administrator
+5. Type in the command: dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart, then press Enter to enable WSL 1
+6. Download the WSL 2 update from Microsoft: https://aka.ms/wsl2kernel
+7. Install the update by double-clicking on the downloaded file
+8. Open PowerShell as an Administrator
+9. Type in the command: wsl --set-default-version 2, then press Enter to set WSL 2 as the default version
+10. Restart your computer to ensure the changes take effect
+
+**************************************************************************************************************************************************************
+
+Version Check
+---------------
+
+CMD -> docker version
+CMD -> docker-compose version
+
+
+

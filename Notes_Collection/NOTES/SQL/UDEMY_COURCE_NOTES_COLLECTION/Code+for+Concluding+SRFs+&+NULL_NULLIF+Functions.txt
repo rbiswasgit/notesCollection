@@ -1,0 +1,40 @@
+select ename, job, sal, comm
+from emp
+where empno in (7839, 7698, 7566, 7654)
+
+
+NVL = NVL() is used for replacing null with some meaningfull value....
+
+select ename, job, sal, NVL(comm, 0)
+from emp
+where empno in (7839, 7698, 7566, 7654)   //---here NVL(comm , 0) function contains comm value which is an integer, so to be replace value/2nd argument should also be an integer
+
+-- Solution to Assginment at 4:00 
+
+select ename, job, sal, NVL(to_char(comm), 'No Data Found')
+from emp
+where empno in (7839, 7698, 7566, 7654) //---here to_char(comm) is used to convert the comm value in string format....then NVL is used in order to use the 2nd argument as String 
+
+
+select ename, length(ename) from emp
+
+
+select ename, length(ename), NULLIF(length(ename), 5) from emp //---NULLIF(arg1,arg2)...NULLIF() returns null/empty cell if both the arg1 and arg2 are equal
+
+
+select ename, length(ename), nvl(NULLIF(length(ename), 5), 'length is 5') from emp /* Gives "invalid number" error */
+
+
+select ename, length(ename), nvl(NULLIF(to_char(length(ename)), to_char(5)), 'length is 5') from emp 
+
+/*
+
+select ename , length(ename) as "Ename Length", NVL(to_char(nullif(length(ename) , 5)) , 'Length is 5') as "Length Check" from emp; // it works
+
+*/
+
+
+select ename, length(ename), nvl(NULLIF(to_char(length(ename)), to_char(5)), 'length is 5') as result, sal from emp 
+where sal > 2000
+
+
